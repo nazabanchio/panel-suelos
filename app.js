@@ -4,11 +4,13 @@
   var CAMPOS = DATA.campos;
   var CHEM_META = DATA.chem_param_meta;
   var BIO_META = DATA.bio_param_meta;
+  var SHARED_META = DATA.shared_param_meta;
   var CAMPO_BY_ID = {};
   CAMPOS.forEach(function (c) { CAMPO_BY_ID[c.id] = c; });
 
   var CHEM_PRIORITY = ["MO", "pH", "CE", "P_BrayI", "N_NO3", "K_Interc", "Ca_Interc", "Mg_Interc", "Azufre_S"];
   var BIO_PRIORITY = ["N_bio", "P_bio", "K_bio", "pH", "ICS", "CO2_Resp", "Pct_Organico", "Act_Biologica"];
+  var SHARED_PRIORITY = ["pH", "CE"];
 
   var CLASS_ORDER = ["CRÍTICO", "INTERMEDIO", "ÓPTIMO"];
   var CLASS_TONE = { "CRÍTICO": "bad", "INTERMEDIO": "warn", "ÓPTIMO": "good" };
@@ -197,7 +199,7 @@
       var badges = "";
       if (c.datasets.indexOf("quimico") !== -1) badges += '<span class="badge q" title="Análisis convencional (macro/micronutrientes)">CONV · ' + c.n_chem + "</span>";
       if (c.datasets.indexOf("biologico") !== -1) badges += '<span class="badge b" title="Análisis microbiológico (TecnoSustrato)">MICROB · ' + c.n_bio + "</span>";
-      if (c.links && c.links.length) badges += '<span class="badge linked" title="Posible mismo campo en el otro estudio">⇄ vinculado</span>';
+      if (c.datasets.indexOf("quimico") !== -1 && c.datasets.indexOf("biologico") !== -1) badges += '<span class="badge linked" title="Este campo tiene datos convencionales y microbiológicos comparables entre sí">⇄ comparación</span>';
       var range = c.first_date === c.last_date ? fmtDateShort(c.last_date) : fmtDateShort(c.first_date) + " – " + fmtDateShort(c.last_date);
       return '<div class="campo-card' + (c.id === state.selectedId ? " selected" : "") + '" data-id="' + c.id + '">' +
         '<div class="row1"><span class="status-dot ' + st + '"></span><span class="campo-title">' + esc(c.lote) + "</span></div>" +
@@ -218,7 +220,9 @@
     "Químico": "var(--series-quimico)",
     "Biológico": "var(--series-biologico)",
     "Testigo": "var(--series-testigo)",
-    "General": "var(--series-general)"
+    "General": "var(--series-general)",
+    "Convencional": "var(--series-quimico)",
+    "Microbiológico": "var(--series-biologico)"
   };
 
   function bandsFor(meta, domainMin, domainMax) {
@@ -386,9 +390,11 @@
   }
 
   // ---------------- detail ----------------
-  function paramsWithData(rows, priorityList, meta) {
+  function paramsWithData(rows, priorityList, meta, getter) {
     var have = {};
-    rows.forEach(function (r) { Object.keys(r.params).forEach(function (k) { if (r.params[k] !== null && r.params[k] !== undefined) have[k] = true; }); });
+    rows.forEach(function (r) {
+      Object.keys(meta).forEach(function (k) { var v = getter(r, k); if (v !== null && v !== undefined) have[k] = true; });
+    });
     var out = priorityList.filter(function (k) { return have[k]; });
     Object.keys(meta).forEach(function (k) { if (have[k] && out.indexOf(k) === -1) out.push(k); });
     return out;
@@ -408,15 +414,22 @@
   function renderCampoDetail(campo) {
     var hasChem = campo.datasets.indexOf("quimico") !== -1;
     var hasBio = campo.datasets.indexOf("biologico") !== -1;
-    if (!state.selectedDataset || (state.selectedDataset === "quimico" && !hasChem) || (state.selectedDataset === "biologico" && !hasBio)) {
+    var hasComparacion = hasChem && hasBio;
+
+    var validModes = ["quimico", "biologico", "comparacion"].filter(function (m) {
+      return (m === "quimico" && hasChem) || (m === "biologico" && hasBio) || (m === "comparacion" && hasComparacion);
+    });
+    if (!state.selectedDataset || validModes.indexOf(state.selectedDataset) === -1) {
       state.selectedDataset = hasChem ? "quimico" : "biologico";
       state.selectedParam = null;
       state.selectedDepth = null;
     }
     var ds = state.selectedDataset;
-    var meta = ds === "quimico" ? CHEM_META : BIO_META;
-    var priority = ds === "quimico" ? CHEM_PRIORITY : BIO_PRIORITY;
-    var dsRows = campo.rows.filter(function (r) { return r.dataset === ds; });
+    var isComparacion = ds === "comparacion";
+    var meta = isComparacion ? SHARED_META : (ds === "quimico" ? CHEM_META : BIO_META);
+    var priority = isComparacion ? SHARED_PRIORITY : (ds === "quimico" ? CHEM_PRIORITY : BIO_PRIORITY);
+    var dsRows = isComparacion ? campo.rows : campo.rows.filter(function (r) { return r.dataset === ds; });
+    function paramVal(r, k) { return isComparacion ? r.shared[k] : r.params[k]; }
 
     var campanas = dsRows.reduce(function (a, r) { if (r.campana && a.indexOf(r.campana) === -1) a.push(r.campana); return a; }, []).sort();
     var municipio = dsRows.map(function (r) { return r.municipio || r.localidad; }).filter(Boolean)[0];
@@ -426,22 +439,19 @@
     if (hasChem) badges += '<span class="badge q">CONVENCIONAL · ' + campo.n_chem + "</span> ";
     if (hasBio) badges += '<span class="badge b">MICROBIOLÓGICO · ' + campo.n_bio + "</span> ";
 
-    var linksHtml = "";
-    if (campo.links && campo.links.length) {
-      var chips = campo.links.map(function (id) {
-        var lc = CAMPO_BY_ID[id];
-        if (!lc) return "";
-        return '<a class="link-chip" data-id="' + id + '">' + esc(lc.lote) + " · " + esc(lc.productor) + "</a>";
-      }).join("");
-      linksHtml = '<div class="links-note">⇄ Posible mismo campo bajo otro nombre o productor — verificar y comparar:<br>' + chips + "</div>";
-    }
-
     var tabsHtml = "";
-    if (hasChem && hasBio) {
+    if (hasComparacion) {
       tabsHtml = '<div class="dataset-tabs">' +
         '<div class="dataset-tab' + (ds === "quimico" ? " active" : "") + '" data-ds="quimico">Convencional</div>' +
         '<div class="dataset-tab' + (ds === "biologico" ? " active" : "") + '" data-ds="biologico">Microbiológico</div>' +
+        '<div class="dataset-tab' + (isComparacion ? " active" : "") + '" data-ds="comparacion">Comparación general</div>' +
         "</div>";
+    }
+
+    var comparacionNote = "";
+    if (isComparacion) {
+      comparacionNote = '<div class="chart-desc" style="margin-top:10px;">Combina ' + esc(labs.join(", ")) +
+        " para este campo. Se muestran solo pH y CE porque son los únicos parámetros medidos de forma comparable entre el análisis convencional y el microbiológico — el resto de los parámetros de cada estudio usa métodos distintos y no es equivalente número a número.</div>";
     }
 
     var depths = dsRows.reduce(function (a, r) { var p = r.prof || "Sin dato"; if (a.indexOf(p) === -1) a.push(p); return a; }, []);
@@ -453,7 +463,7 @@
       }).join("") + "</div>";
     }
 
-    var availParams = paramsWithData(dsRows, priority, meta);
+    var availParams = paramsWithData(dsRows, priority, meta, paramVal);
     if (!state.selectedParam || availParams.indexOf(state.selectedParam) === -1) state.selectedParam = availParams[0];
     var paramHtml = '<div class="param-picker">' + availParams.map(function (k) {
       return '<span class="chip param-chip' + (k === state.selectedParam ? " active" : "") + '" data-param="' + k + '" title="' + esc(meta[k].label) + '">' + esc(meta[k].label) + "</span>";
@@ -463,15 +473,15 @@
     if (state.selectedParam) {
       var pmeta = meta[state.selectedParam];
       var chartRows = dsRows.filter(function (r) { return (r.prof || "Sin dato") === state.selectedDepth; });
-      var byTipo = {};
+      var byGroup = {};
       chartRows.forEach(function (r) {
-        var v = r.params[state.selectedParam];
+        var v = paramVal(r, state.selectedParam);
         if (v === null || v === undefined) return;
-        var tk = r.tipo || "General";
-        if (!byTipo[tk]) byTipo[tk] = [];
-        byTipo[tk].push({ x: r.fecha, y: v });
+        var tk = isComparacion ? (r.dataset === "quimico" ? "Convencional" : "Microbiológico") : (r.tipo || "General");
+        if (!byGroup[tk]) byGroup[tk] = [];
+        byGroup[tk].push({ x: r.fecha, y: v });
       });
-      var seriesList = Object.keys(byTipo).map(function (k) { return { label: k, points: byTipo[k] }; });
+      var seriesList = Object.keys(byGroup).map(function (k) { return { label: k, points: byGroup[k] }; });
       var legendHtml = "";
       if (seriesList.length > 1) {
         legendHtml = '<div class="legend">' + seriesList.map(function (s) {
@@ -488,10 +498,12 @@
 
     var tableCols = availParams.slice(0, 12);
     var tableRows = dsRows.slice().sort(function (a, b) { return (a.fecha || "").localeCompare(b.fecha || ""); });
-    var theadHtml = "<tr><th>Fecha</th><th>Tipo</th><th>Prof.</th>" + tableCols.map(function (k) { return "<th>" + esc(meta[k].label.length > 16 ? k.replace(/_/g, " ") : meta[k].label) + "</th>"; }).join("") + (ds === "quimico" ? "<th>Score</th>" : "") + "</tr>";
+    var theadHtml = "<tr><th>Fecha</th>" + (isComparacion ? "<th>Laboratorio</th>" : "") + "<th>Tipo</th><th>Prof.</th>" +
+      tableCols.map(function (k) { return "<th>" + esc(meta[k].label.length > 16 ? k.replace(/_/g, " ") : meta[k].label) + "</th>"; }).join("") +
+      (ds === "quimico" ? "<th>Score</th>" : "") + "</tr>";
     var tbodyHtml = tableRows.map(function (r) {
       var cells = tableCols.map(function (k) {
-        var v = r.params[k];
+        var v = paramVal(r, k);
         var st = statusFor(v, meta[k]);
         var cls = st ? "cell-" + st : "";
         return '<td class="' + cls + '">' + (v === null || v === undefined ? "—" : fmtNum(v)) + "</td>";
@@ -501,7 +513,8 @@
         var stq = classTone(r.clasificacion);
         scoreCell = '<td class="' + (stq ? "cell-" + stq : "") + '">' + (r.clasificacion || (r.score !== null && r.score !== undefined ? fmtNum(r.score) : "—")) + "</td>";
       }
-      return "<tr><td>" + fmtDate(r.fecha) + '</td><td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
+      var labCell = isComparacion ? "<td>" + esc(r.lab || "—") + "</td>" : "";
+      return "<tr><td>" + fmtDate(r.fecha) + "</td>" + labCell + '<td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
     }).join("");
 
     var pane = document.getElementById("detailPane");
@@ -516,8 +529,8 @@
       '<span class="meta-item">Campañas: <b>' + (campanas.join(", ") || "—") + "</b></span>" +
       '<span class="meta-item">Laboratorios: <b>' + (labs.join(", ") || "—") + "</b></span>" +
       "</div>" +
-      linksHtml +
       tabsHtml +
+      comparacionNote +
       '<div class="subcontrols">' + paramHtml + depthHtml + "</div>" +
       chartHtml +
       '<div class="table-scroll"><table class="data-table"><thead>' + theadHtml + "</thead><tbody>" + tbodyHtml + "</tbody></table></div>" +
@@ -538,9 +551,6 @@
     });
     Array.prototype.forEach.call(pane.querySelectorAll(".param-chip"), function (el) {
       el.addEventListener("click", function () { state.selectedParam = el.getAttribute("data-param"); renderCampoDetail(campo); });
-    });
-    Array.prototype.forEach.call(pane.querySelectorAll(".link-chip"), function (el) {
-      el.addEventListener("click", function () { selectCampo(el.getAttribute("data-id")); });
     });
   }
 
