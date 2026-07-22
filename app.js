@@ -10,7 +10,7 @@
 
   var CHEM_PRIORITY = ["MO", "pH", "CE", "P_BrayI", "N_NO3", "K_Interc", "Ca_Interc", "Mg_Interc", "Azufre_S"];
   var BIO_PRIORITY = ["N_bio", "P_bio", "K_bio", "pH", "ICS", "CO2_Resp", "Pct_Organico", "Act_Biologica"];
-  var SHARED_PRIORITY = ["pH", "CE"];
+  var SHARED_PRIORITY = ["pH", "CE", "MO"];
 
   var CLASS_ORDER = ["CRÍTICO", "INTERMEDIO", "ÓPTIMO"];
   var CLASS_TONE = { "CRÍTICO": "bad", "INTERMEDIO": "warn", "ÓPTIMO": "good" };
@@ -53,6 +53,25 @@
     if (tipo === "Biológico") return "tipo-biologico";
     if (tipo === "Testigo") return "tipo-testigo";
     return "";
+  }
+
+  function aggregateByYear(points) {
+    // the "Comparación general" view pools every lab for a lot -- several
+    // can sample the same lot within the same year, which would otherwise
+    // plot as several overlapping points right on top of each other. One
+    // averaged point per year reads as an actual trend instead of clutter.
+    var byYear = {};
+    points.forEach(function (p) {
+      var year = (p.x || "").slice(0, 4);
+      if (!year) return;
+      if (!byYear[year]) byYear[year] = [];
+      byYear[year].push(p.y);
+    });
+    return Object.keys(byYear).sort().map(function (year) {
+      var vals = byYear[year];
+      var avg = vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
+      return { x: year, y: avg };
+    });
   }
 
   function statusFor(value, meta) {
@@ -296,10 +315,18 @@
     }
 
     var step = Math.ceil(allDates.length / 7);
+    var lastLabel = null;
     allDates.forEach(function (d, i) {
       if (i % step !== 0 && i !== allDates.length - 1) return;
+      var label = fmtDateShort(d);
+      // two dates a day or two apart (different labs testing the same lot in
+      // the same week) can render the same "mmm yy" label right next to
+      // itself, which reads as a glitch -- skip the repeat, the point itself
+      // still gets its own x position and tooltip
+      if (label === lastLabel) return;
+      lastLabel = label;
       var x = xPos(d);
-      svg.push('<text x="' + x.toFixed(1) + '" y="' + (H - MB + 16) + '" text-anchor="middle" font-size="10" fill="var(--ink-faint)">' + fmtDateShort(d) + "</text>");
+      svg.push('<text x="' + x.toFixed(1) + '" y="' + (H - MB + 16) + '" text-anchor="middle" font-size="10" fill="var(--ink-faint)">' + esc(label) + "</text>");
     });
 
     seriesList.forEach(function (s) {
@@ -481,7 +508,9 @@
         if (!byGroup[tk]) byGroup[tk] = [];
         byGroup[tk].push({ x: r.fecha, y: v });
       });
-      var seriesList = Object.keys(byGroup).map(function (k) { return { label: k, points: byGroup[k] }; });
+      var seriesList = Object.keys(byGroup).map(function (k) {
+        return { label: k, points: isComparacion ? aggregateByYear(byGroup[k]) : byGroup[k] };
+      });
       var legendHtml = "";
       if (seriesList.length > 1) {
         legendHtml = '<div class="legend">' + seriesList.map(function (s) {
@@ -498,7 +527,7 @@
 
     var tableCols = availParams.slice(0, 12);
     var tableRows = dsRows.slice().sort(function (a, b) { return (a.fecha || "").localeCompare(b.fecha || ""); });
-    var theadHtml = "<tr><th>Fecha</th>" + (isComparacion ? "<th>Laboratorio</th>" : "") + "<th>Tipo</th><th>Prof.</th>" +
+    var theadHtml = "<tr><th>Fecha</th><th>Informe</th>" + (isComparacion ? "<th>Laboratorio</th>" : "") + "<th>Tipo</th><th>Prof.</th>" +
       tableCols.map(function (k) { return "<th>" + esc(meta[k].label.length > 16 ? k.replace(/_/g, " ") : meta[k].label) + "</th>"; }).join("") +
       (ds === "quimico" ? "<th>Score</th>" : "") + "</tr>";
     var tbodyHtml = tableRows.map(function (r) {
@@ -514,7 +543,8 @@
         scoreCell = '<td class="' + (stq ? "cell-" + stq : "") + '">' + (r.clasificacion || (r.score !== null && r.score !== undefined ? fmtNum(r.score) : "—")) + "</td>";
       }
       var labCell = isComparacion ? "<td>" + esc(r.lab || "—") + "</td>" : "";
-      return "<tr><td>" + fmtDate(r.fecha) + "</td>" + labCell + '<td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
+      var informeCell = "<td>" + (r.informe_file ? '<a href="' + esc(r.informe_file) + '" target="_blank" rel="noopener" class="informe-link" title="Abrir informe original en PDF">Ver PDF</a>' : "—") + "</td>";
+      return "<tr><td>" + fmtDate(r.fecha) + "</td>" + informeCell + labCell + '<td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
     }).join("");
 
     var pane = document.getElementById("detailPane");

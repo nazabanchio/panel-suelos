@@ -138,12 +138,13 @@ BIO_PARAM_MAP = [
     ("SBE (bio)", "SBE"), ("Compactación", "Compactacion"), ("Respiración", "Respiracion"),
 ]
 # Shared, genuinely comparable across both methodologies -- used for the
-# cross-lab "Comparación general" view. NOTE: MO (%) is deliberately excluded
-# even though the sheet fills it for TecnoSustrato rows too -- there it is
-# just a copy of "% Orgánico" (a cromatography organic-fraction reading, 40-90%
-# range), not Walkley-Black organic matter (1-4% range). Treating them as the
-# same number would be scientifically misleading.
+# cross-lab "Comparación general" view.
 SHARED_PARAM_MAP = [("pH", "pH"), ("CE (µS/cm)", "CE")]
+# MO (%) is handled separately below: it's chem-only. The sheet also fills
+# "MO (%)" for TecnoSustrato rows, but there it's just a copy of "% Orgánico"
+# (a cromatography organic-fraction reading, 40-90% range), not Walkley-Black
+# organic matter (1-4% range) -- pulling that value in would make the two
+# series look wildly, misleadingly different on the same chart.
 
 CHEM_LABS = {"Laboratorio Molisol", "Clínica de Suelos Agroconsultora", "AFA Planta Formuladora", "AgLab"}
 BIO_LABS = {"TecnoSustrato"}
@@ -181,6 +182,7 @@ for r in range(4, ws.max_row + 1):
     shared = {}
     for xlname, key in SHARED_PARAM_MAP:
         shared[key] = to_num(ws.cell(row=r, column=idx[xlname]).value)
+    shared["MO"] = to_num(ws.cell(row=r, column=idx["MO (%)"]).value) if dataset == "quimico" else None
 
     fecha = clean_date(ws.cell(row=r, column=idx["Fecha"]).value)
     raw_fecha = ws.cell(row=r, column=idx["Fecha"]).value
@@ -212,6 +214,52 @@ n_bio = sum(1 for r in rows if r["dataset"] == "biologico")
 print("chem rows:", n_chem, "| bio rows:", n_bio, "| total:", len(rows))
 if bad_dates:
     print("WARNING unparsed dates:", bad_dates)
+
+# ---------- LINK SOURCE PDF REPORTS ----------
+# "informe" is a mix of real report codes (S23-0102 B), real PDF filenames
+# (Banchio 526 (1).pdf), and -- for many rows -- just the lot name again,
+# which is NOT a document reference. Only link when a PDF's filename
+# uniquely contains the informe string, and never when the only candidate is
+# a climate report that happens to also mention the lot name.
+import shutil
+
+REPORTS_SRC_EXCLUDE_DIRS = {"panel-suelos-web"}
+REPORTS_EXCLUDE_KEYWORDS = ["climatol", "clima"]
+REPORTS_OUT_DIR = os.path.join(OUT_DIR, "reports")
+
+def _norm_fname(s):
+    return re.sub(r"[\s_\-]+", " ", s).strip().lower()
+
+all_pdfs = []
+for root, dirs, files in os.walk(BASE_XLSX):
+    if any(ex in root for ex in REPORTS_SRC_EXCLUDE_DIRS):
+        continue
+    for f in files:
+        if f.lower().endswith(".pdf"):
+            all_pdfs.append(os.path.join(root, f))
+
+informe_to_path = {}
+for r in rows:
+    inf = r.get("informe")
+    if not inf or inf in informe_to_path:
+        continue
+    inf_n = _norm_fname(inf)
+    candidates = [p for p in all_pdfs if inf_n in _norm_fname(os.path.basename(p))]
+    candidates = [p for p in candidates if not any(k in _norm_fname(os.path.basename(p)) for k in REPORTS_EXCLUDE_KEYWORDS)]
+    if len(candidates) == 1:
+        informe_to_path[inf] = candidates[0]
+
+os.makedirs(REPORTS_OUT_DIR, exist_ok=True)
+informe_to_slug = {}
+for i, (inf, src_path) in enumerate(sorted(informe_to_path.items())):
+    slug = f"report_{i:03d}.pdf"
+    shutil.copyfile(src_path, os.path.join(REPORTS_OUT_DIR, slug))
+    informe_to_slug[inf] = f"reports/{slug}"
+
+for r in rows:
+    r["informe_file"] = informe_to_slug.get(r.get("informe"))
+
+print("linked source reports:", len(informe_to_slug), "of", len(set(r["informe"] for r in rows if r.get("informe"))), "distinct informes")
 
 # ---------- INITIAL GROUPING (exact productor + lote_core match) ----------
 def group_key(row):
@@ -406,6 +454,7 @@ BIO_PARAM_META = {
 SHARED_PARAM_META = {
     "pH": {"label": "pH", "unit": "", "dir": "rng", "range_opt": [6.0, 7.0], "range_warn": [5.5, 7.5]},
     "CE": {"label": "Conductividad Eléctrica", "unit": "µS/cm", "dir": "lo", "crit": 800, "opt": 400},
+    "MO": {"label": "Materia Orgánica (solo convencional)", "unit": "%", "dir": "hi", "crit": 2.0, "opt": 3.5},
 }
 
 out = {
