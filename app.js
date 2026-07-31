@@ -4,13 +4,11 @@
   var CAMPOS = DATA.campos;
   var CHEM_META = DATA.chem_param_meta;
   var BIO_META = DATA.bio_param_meta;
-  var SHARED_META = DATA.shared_param_meta;
   var CAMPO_BY_ID = {};
   CAMPOS.forEach(function (c) { CAMPO_BY_ID[c.id] = c; });
 
   var CHEM_PRIORITY = ["MO", "pH", "CE", "P_BrayI", "N_NO3", "K_Interc", "Ca_Interc", "Mg_Interc", "Azufre_S"];
   var BIO_PRIORITY = ["N_bio", "P_bio", "K_bio", "pH", "ICS", "CO2_Resp", "Pct_Organico", "Act_Biologica"];
-  var SHARED_PRIORITY = ["pH", "CE", "MO"];
 
   var CLASS_ORDER = ["CRÍTICO", "INTERMEDIO", "ÓPTIMO"];
   var CLASS_TONE = { "CRÍTICO": "bad", "INTERMEDIO": "warn", "ÓPTIMO": "good" };
@@ -53,25 +51,6 @@
     if (tipo === "Biológico") return "tipo-biologico";
     if (tipo === "Testigo") return "tipo-testigo";
     return "";
-  }
-
-  function aggregateByYear(points) {
-    // the "Comparación general" view pools every lab for a lot -- several
-    // can sample the same lot within the same year, which would otherwise
-    // plot as several overlapping points right on top of each other. One
-    // averaged point per year reads as an actual trend instead of clutter.
-    var byYear = {};
-    points.forEach(function (p) {
-      var year = (p.x || "").slice(0, 4);
-      if (!year) return;
-      if (!byYear[year]) byYear[year] = [];
-      byYear[year].push(p.y);
-    });
-    return Object.keys(byYear).sort().map(function (year) {
-      var vals = byYear[year];
-      var avg = vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
-      return { x: year, y: avg };
-    });
   }
 
   function statusFor(value, meta) {
@@ -130,7 +109,7 @@
   }
 
   function defaultSparkParam(campo) {
-    if (campo.datasets.indexOf("quimico") !== -1) return { ds: "quimico", key: "MO", meta: CHEM_META.MO };
+    if (campo.dataset === "quimico") return { ds: "quimico", key: "MO", meta: CHEM_META.MO };
     return { ds: "biologico", key: "ICS", meta: BIO_META.ICS };
   }
 
@@ -142,7 +121,6 @@
     productor: "todos",
     sort: "nombre",
     selectedId: null,
-    selectedDataset: null,
     selectedParam: null,
     selectedDepth: null
   };
@@ -159,7 +137,7 @@
   function getFiltered() {
     var q = norm(state.search.trim());
     var list = CAMPOS.filter(function (c) {
-      if (state.dataset !== "todos" && c.datasets.indexOf(state.dataset) === -1) return false;
+      if (state.dataset !== "todos" && c.dataset !== state.dataset) return false;
       if (state.tipo !== "todos" && c.tipos.indexOf(state.tipo) === -1) return false;
       if (state.productor !== "todos" && c.productor !== state.productor) return false;
       if (q && campoSearchBlob(c).indexOf(q) === -1) return false;
@@ -215,10 +193,9 @@
     }
     var html = list.map(function (c) {
       var st = campoOverallStatus(c) || "none";
-      var badges = "";
-      if (c.datasets.indexOf("quimico") !== -1) badges += '<span class="badge q" title="Análisis convencional (macro/micronutrientes)">CONV · ' + c.n_chem + "</span>";
-      if (c.datasets.indexOf("biologico") !== -1) badges += '<span class="badge b" title="Análisis microbiológico (TecnoSustrato)">MICROB · ' + c.n_bio + "</span>";
-      if (c.datasets.indexOf("quimico") !== -1 && c.datasets.indexOf("biologico") !== -1) badges += '<span class="badge linked" title="Este campo tiene datos convencionales y microbiológicos comparables entre sí">⇄ comparación</span>';
+      var badges = c.dataset === "quimico"
+        ? '<span class="badge q" title="Análisis convencional (macro/micronutrientes)">CONV · ' + c.n_analyses + "</span>"
+        : '<span class="badge b" title="Análisis microbiológico (TecnoSustrato)">MICROB · ' + c.n_analyses + "</span>";
       var range = c.first_date === c.last_date ? fmtDateShort(c.last_date) : fmtDateShort(c.first_date) + " – " + fmtDateShort(c.last_date);
       return '<div class="campo-card' + (c.id === state.selectedId ? " selected" : "") + '" data-id="' + c.id + '">' +
         '<div class="row1"><span class="status-dot ' + st + '"></span><span class="campo-title">' + esc(c.lote) + "</span></div>" +
@@ -351,8 +328,7 @@
 
   // ---------------- overview ----------------
   function renderOverview() {
-    var nChem = 0, nBio = 0;
-    CAMPOS.forEach(function (c) { nChem += c.n_chem; nBio += c.n_bio; });
+    var nChem = DATA.stats.n_chem, nBio = DATA.stats.n_bio;
 
     var classCounts = {};
     CLASS_ORDER.forEach(function (k) { classCounts[k] = 0; });
@@ -439,47 +415,19 @@
   }
 
   function renderCampoDetail(campo) {
-    var hasChem = campo.datasets.indexOf("quimico") !== -1;
-    var hasBio = campo.datasets.indexOf("biologico") !== -1;
-    var hasComparacion = hasChem && hasBio;
-
-    var validModes = ["quimico", "biologico", "comparacion"].filter(function (m) {
-      return (m === "quimico" && hasChem) || (m === "biologico" && hasBio) || (m === "comparacion" && hasComparacion);
-    });
-    if (!state.selectedDataset || validModes.indexOf(state.selectedDataset) === -1) {
-      state.selectedDataset = hasChem ? "quimico" : "biologico";
-      state.selectedParam = null;
-      state.selectedDepth = null;
-    }
-    var ds = state.selectedDataset;
-    var isComparacion = ds === "comparacion";
-    var meta = isComparacion ? SHARED_META : (ds === "quimico" ? CHEM_META : BIO_META);
-    var priority = isComparacion ? SHARED_PRIORITY : (ds === "quimico" ? CHEM_PRIORITY : BIO_PRIORITY);
-    var dsRows = isComparacion ? campo.rows : campo.rows.filter(function (r) { return r.dataset === ds; });
-    function paramVal(r, k) { return isComparacion ? r.shared[k] : r.params[k]; }
+    var ds = campo.dataset;
+    var meta = ds === "quimico" ? CHEM_META : BIO_META;
+    var priority = ds === "quimico" ? CHEM_PRIORITY : BIO_PRIORITY;
+    var dsRows = campo.rows;
+    function paramVal(r, k) { return r.params[k]; }
 
     var campanas = dsRows.reduce(function (a, r) { if (r.campana && a.indexOf(r.campana) === -1) a.push(r.campana); return a; }, []).sort();
     var municipio = dsRows.map(function (r) { return r.municipio || r.localidad; }).filter(Boolean)[0];
     var labs = dsRows.reduce(function (a, r) { if (r.lab && a.indexOf(r.lab) === -1) a.push(r.lab); return a; }, []);
 
-    var badges = "";
-    if (hasChem) badges += '<span class="badge q">CONVENCIONAL · ' + campo.n_chem + "</span> ";
-    if (hasBio) badges += '<span class="badge b">MICROBIOLÓGICO · ' + campo.n_bio + "</span> ";
-
-    var tabsHtml = "";
-    if (hasComparacion) {
-      tabsHtml = '<div class="dataset-tabs">' +
-        '<div class="dataset-tab' + (ds === "quimico" ? " active" : "") + '" data-ds="quimico">Convencional</div>' +
-        '<div class="dataset-tab' + (ds === "biologico" ? " active" : "") + '" data-ds="biologico">Microbiológico</div>' +
-        '<div class="dataset-tab' + (isComparacion ? " active" : "") + '" data-ds="comparacion">Comparación general</div>' +
-        "</div>";
-    }
-
-    var comparacionNote = "";
-    if (isComparacion) {
-      comparacionNote = '<div class="chart-desc" style="margin-top:10px;">Combina ' + esc(labs.join(", ")) +
-        " para este campo. Se muestran solo pH y CE porque son los únicos parámetros medidos de forma comparable entre el análisis convencional y el microbiológico — el resto de los parámetros de cada estudio usa métodos distintos y no es equivalente número a número.</div>";
-    }
+    var badges = ds === "quimico"
+      ? '<span class="badge q">CONVENCIONAL · ' + campo.n_analyses + "</span>"
+      : '<span class="badge b">MICROBIOLÓGICO · ' + campo.n_analyses + "</span>";
 
     var depths = dsRows.reduce(function (a, r) { var p = r.prof || "Sin dato"; if (a.indexOf(p) === -1) a.push(p); return a; }, []);
     if (!state.selectedDepth || depths.indexOf(state.selectedDepth) === -1) state.selectedDepth = modeDepth(dsRows);
@@ -504,13 +452,11 @@
       chartRows.forEach(function (r) {
         var v = paramVal(r, state.selectedParam);
         if (v === null || v === undefined) return;
-        var tk = isComparacion ? (r.dataset === "quimico" ? "Convencional" : "Microbiológico") : (r.tipo || "General");
+        var tk = r.tipo || "General";
         if (!byGroup[tk]) byGroup[tk] = [];
         byGroup[tk].push({ x: r.fecha, y: v });
       });
-      var seriesList = Object.keys(byGroup).map(function (k) {
-        return { label: k, points: isComparacion ? aggregateByYear(byGroup[k]) : byGroup[k] };
-      });
+      var seriesList = Object.keys(byGroup).map(function (k) { return { label: k, points: byGroup[k] }; });
       var legendHtml = "";
       if (seriesList.length > 1) {
         legendHtml = '<div class="legend">' + seriesList.map(function (s) {
@@ -527,7 +473,7 @@
 
     var tableCols = availParams.slice(0, 12);
     var tableRows = dsRows.slice().sort(function (a, b) { return (a.fecha || "").localeCompare(b.fecha || ""); });
-    var theadHtml = "<tr><th>Fecha</th><th>Informe</th>" + (isComparacion ? "<th>Laboratorio</th>" : "") + "<th>Tipo</th><th>Prof.</th>" +
+    var theadHtml = "<tr><th>Fecha</th><th>Informe</th><th>Laboratorio</th><th>Tipo</th><th>Prof.</th>" +
       tableCols.map(function (k) { return "<th>" + esc(meta[k].label.length > 16 ? k.replace(/_/g, " ") : meta[k].label) + "</th>"; }).join("") +
       (ds === "quimico" ? "<th>Score</th>" : "") + "</tr>";
     var tbodyHtml = tableRows.map(function (r) {
@@ -542,7 +488,7 @@
         var stq = classTone(r.clasificacion);
         scoreCell = '<td class="' + (stq ? "cell-" + stq : "") + '">' + (r.clasificacion || (r.score !== null && r.score !== undefined ? fmtNum(r.score) : "—")) + "</td>";
       }
-      var labCell = isComparacion ? "<td>" + esc(r.lab || "—") + "</td>" : "";
+      var labCell = "<td>" + esc(r.lab || "—") + "</td>";
       var informeCell = "<td>" + (r.informe_file ? '<a href="' + esc(r.informe_file) + '" target="_blank" rel="noopener" class="informe-link" title="Abrir informe original en PDF">Ver PDF</a>' : "—") + "</td>";
       return "<tr><td>" + fmtDate(r.fecha) + "</td>" + informeCell + labCell + '<td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
     }).join("");
@@ -559,8 +505,6 @@
       '<span class="meta-item">Campañas: <b>' + (campanas.join(", ") || "—") + "</b></span>" +
       '<span class="meta-item">Laboratorios: <b>' + (labs.join(", ") || "—") + "</b></span>" +
       "</div>" +
-      tabsHtml +
-      comparacionNote +
       '<div class="subcontrols">' + paramHtml + depthHtml + "</div>" +
       chartHtml +
       '<div class="table-scroll"><table class="data-table"><thead>' + theadHtml + "</thead><tbody>" + tbodyHtml + "</tbody></table></div>" +
@@ -569,13 +513,6 @@
     var backBtn = document.getElementById("backBtn");
     if (backBtn) backBtn.addEventListener("click", function () { state.selectedId = null; render(); window.scrollTo({ top: 0, behavior: "smooth" }); });
 
-    Array.prototype.forEach.call(pane.querySelectorAll(".dataset-tab"), function (el) {
-      el.addEventListener("click", function () {
-        state.selectedDataset = el.getAttribute("data-ds");
-        state.selectedParam = null; state.selectedDepth = null;
-        renderCampoDetail(campo);
-      });
-    });
     Array.prototype.forEach.call(pane.querySelectorAll(".depth-chip"), function (el) {
       el.addEventListener("click", function () { state.selectedDepth = el.getAttribute("data-depth"); renderCampoDetail(campo); });
     });
@@ -586,7 +523,7 @@
 
   function selectCampo(id) {
     state.selectedId = id;
-    state.selectedDataset = null; state.selectedParam = null; state.selectedDepth = null;
+    state.selectedParam = null; state.selectedDepth = null;
     render();
     var card = document.querySelector('.campo-card[data-id="' + id + '"]');
     if (card) card.scrollIntoView({ block: "nearest" });
