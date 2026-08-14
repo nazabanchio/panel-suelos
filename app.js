@@ -490,7 +490,10 @@
       }
       var labCell = "<td>" + esc(r.lab || "—") + "</td>";
       var informeCell = "<td>" + (r.informe_file ? '<a href="' + esc(r.informe_file) + '" target="_blank" rel="noopener" class="informe-link" title="Abrir informe original en PDF">Ver PDF</a>' : "—") + "</td>";
-      return "<tr><td>" + fmtDate(r.fecha) + "</td>" + informeCell + labCell + '<td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
+      var fechaCell = r.fecha_is_estimate
+        ? '<td title="Sin fecha exacta en la planilla: se usa el inicio de la campaña ' + esc(r.campana || "") + ' como referencia">~' + fmtDate(r.fecha) + "</td>"
+        : "<td>" + fmtDate(r.fecha) + "</td>";
+      return "<tr>" + fechaCell + informeCell + labCell + '<td><span class="tipo-pill ' + tipoClass(r.tipo) + '">' + esc(r.tipo || "—") + '</span></td><td>' + esc(r.prof || "—") + "</td>" + cells + scoreCell + "</tr>";
     }).join("");
 
     var pane = document.getElementById("detailPane");

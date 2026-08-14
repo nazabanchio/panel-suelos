@@ -2,8 +2,22 @@ import openpyxl, json, re, unicodedata, datetime, os, shutil
 from collections import defaultdict, Counter
 
 BASE_XLSX = "/Users/joaquinbanchio/Desktop/Trabajo Papi/Analisis suelos"
-SRC_FILE = "Analisis_Suelos_UNIFICADO_v5.xlsx"
+SRC_FILE = "Analisis_Suelos_UNIFICADO_v7.xlsx"
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def campana_fallback_date(campana):
+    """Rows collapsed under Excel row-grouping (see read_sheet) often have no
+    Fecha of their own, only a Campaña like '2025/2026' or '25/26'. Falling
+    back to Jul 1 of the campaign's first year keeps them plottable on the
+    evolution chart, at campaign-level granularity instead of an exact date."""
+    if not campana:
+        return None
+    m = re.match(r"^(\d{2}|\d{4})/", str(campana).strip())
+    if not m:
+        return None
+    yr = m.group(1)
+    yr = ("20" + yr) if len(yr) == 2 else yr
+    return f"{yr}-07-01"
 
 def strip_accents(s):
     if s is None: return ""
@@ -146,22 +160,23 @@ def read_sheet(sheet_name, dataset, param_map):
     headers = [ws.cell(row=3, column=c).value for c in range(1, ws.max_column + 1)]
     idx = {h: i + 1 for i, h in enumerate(headers) if h}
     out_rows = []
+    n_hidden_skipped = 0
+    n_fallback_date = 0
     for r in range(4, ws.max_row + 1):
+        # The sheet uses Excel row-grouping: a lot's individual per-depth (or
+        # per-muestra, for TecnoSustrato) rows are collapsed/hidden under a
+        # visible "▶ PROMEDIO" summary row. Per instruction, hidden rows are
+        # dropped entirely -- only what's visible in the sheet counts.
+        if ws.row_dimensions[r].hidden:
+            n_hidden_skipped += 1
+            continue
+
         lab = clean(ws.cell(row=r, column=idx["Laboratorio"]).value)
         if not lab or lab == "Laboratorio":
             continue
         lote_raw = clean(ws.cell(row=r, column=idx["Lote"]).value)
         if not lote_raw:
             continue
-
-        clasif_raw = ws.cell(row=r, column=idx["Clasificación ponderada"]).value if "Clasificación ponderada" in idx else None
-        if clasif_raw and "PROMEDIO" in str(clasif_raw):
-            continue  # a per-campaign average row (no real sample date), not an individual analysis
-
-        if dataset == "biologico":
-            muestra = clean(ws.cell(row=r, column=idx["Posición/Muestra"]).value)
-            if muestra is None:
-                continue  # per-report "PROMEDIO" summary row, not a real sample
 
         prod_raw = clean(ws.cell(row=r, column=idx["Productor/Propietario"]).value)
         core, tipo_from_lote = normalize_core(lote_raw)
@@ -172,7 +187,15 @@ def read_sheet(sheet_name, dataset, param_map):
         for xlname, key in param_map:
             params[key] = to_num(ws.cell(row=r, column=idx[xlname]).value)
 
+        campana = clean(ws.cell(row=r, column=idx["Campaña"]).value)
         fecha = clean_date(ws.cell(row=r, column=idx["Fecha"]).value)
+        fecha_is_estimate = False
+        if fecha is None:
+            fallback = campana_fallback_date(campana)
+            if fallback:
+                fecha = fallback
+                fecha_is_estimate = True
+                n_fallback_date += 1
 
         out_rows.append({
             "dataset": dataset,
@@ -186,11 +209,13 @@ def read_sheet(sheet_name, dataset, param_map):
             "muestra": clean(ws.cell(row=r, column=idx["Posición/Muestra"]).value),
             "prof": norm_prof(ws.cell(row=r, column=idx["Profundidad"]).value),
             "fecha": fecha,
-            "campana": clean(ws.cell(row=r, column=idx["Campaña"]).value),
+            "fecha_is_estimate": fecha_is_estimate,
+            "campana": campana,
             "params": params,
             "score": to_num(ws.cell(row=r, column=idx["Score ponderado"]).value) if "Score ponderado" in idx else None,
             "clasificacion": clean(ws.cell(row=r, column=idx["Clasificación ponderada"]).value) if "Clasificación ponderada" in idx else None,
         })
+    print(f"  {sheet_name}: skipped {n_hidden_skipped} hidden rows, {n_fallback_date} rows use a campaign-start estimate for Fecha")
     return out_rows
 
 chem_rows = read_sheet("Laboratorios", "quimico", CHEM_PARAM_MAP)
