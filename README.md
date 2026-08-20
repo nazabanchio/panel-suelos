@@ -14,30 +14,38 @@ fichas de campo distintas, cada una con su propio badge (CONV / MICROB). El
 prácticas de manejo, pero eso ocurre *dentro* del estudio convencional (según
 la columna "Manejo/Tipo"), nunca entre los dos estudios.
 
-**Solo se cuentan las filas visibles en el Excel.** La planilla usa
-agrupación de filas de Excel: las muestras individuales (por profundidad, o
-M1/M2/M3 en TecnoSustrato) quedan colapsadas/ocultas debajo de una fila
-visible de "▶ PROMEDIO" por lote. El panel ignora todo lo oculto y usa solo
-lo visible — que a veces es la fila de promedio, sin fecha exacta. En esos
-casos se estima la fecha como el 1° de julio del primer año de la Campaña
-(ej. "2024/2025" → 2024-07-01), marcada con "~" en la tabla.
+**Solo se cuentan las filas visibles en el Excel.** Si una planilla futura
+vuelve a usar agrupación de filas de Excel (muestras individuales colapsadas
+bajo una fila visible de "▶ PROMEDIO" por lote), el panel ignora todo lo
+oculto. Cuando la única fila visible es un promedio sin fecha exacta, se
+estima la fecha como el 1° de julio del primer año de la Campaña (ej.
+"2024/2025" → 2024-07-01), marcada con "~" en la tabla.
+
+**Los gráficos de evolución promedian por fecha exacta.** Cuando un mismo
+lote/fecha tiene varias sub-muestras (por ejemplo, AgLab suele enviar 5-6
+puntos del mismo día), se grafica un solo punto promedio por fecha — si no,
+quedan superpuestas como un amontonamiento vertical en vez de una tendencia
+legible. La tabla de abajo del gráfico sigue mostrando cada muestra por
+separado, sin promediar.
 
 ## Archivos
 
 - `index.html` — la página final, autocontenida (esto es lo que se publica).
 - `template.html` / `app.js` / `data.json` — piezas fuente que arman `index.html`.
-- `extract.py` — script que lee "Analisis_Suelos_UNIFICADO_v7.xlsx", hojas
-  "Laboratorios" y "TecnoSustrato" por separado, y genera `data.json`. Agrupa
-  por campo/lote *dentro de cada hoja* y fusiona automáticamente los lotes que
-  comparten nombre entre laboratorios del mismo estudio (con reglas
-  conservadoras para evitar fusionar lotes distintos que coinciden por
-  casualidad en un número). Nunca fusiona entre hojas/estudios distintos.
+- `extract.py` — script que lee "UNIFICADO_v8 (no coprimido y sin pocos
+  datos).xlsx", hojas "Laboratorios" y "TecnoSustrato" por separado, y genera
+  `data.json`. Agrupa por campo/lote *dentro de cada hoja* y fusiona
+  automáticamente los lotes que comparten nombre entre laboratorios del mismo
+  estudio (con reglas conservadoras para evitar fusionar lotes distintos que
+  coinciden por casualidad en un número). Nunca fusiona entre hojas/estudios
+  distintos.
 - `build.py` — junta `template.html` + `app.js` + `data.json` en `index.html`.
 
 ## Actualizar los datos
 
-Cuando cambie el Excel de origen (mismo nombre de archivo y mismas hojas
-"Laboratorios" / "TecnoSustrato"):
+Cuando cambie el Excel de origen, actualizá `SRC_FILE` al inicio de
+`extract.py` con el nombre nuevo (misma estructura de hojas "Laboratorios" /
+"TecnoSustrato"):
 
 ```
 python3 extract.py   # regenera data.json a partir del Excel

@@ -53,6 +53,24 @@
     return "";
   }
 
+  function aggregateByDate(points) {
+    // Some reports (AgLab in particular) submit several sub-samples under the
+    // exact same date/depth -- plotted individually those land right on top
+    // of each other as a scattered vertical smear instead of a trend. One
+    // averaged point per date reads as an actual evolution line.
+    var byDate = {};
+    var order = [];
+    points.forEach(function (p) {
+      if (!byDate[p.x]) { byDate[p.x] = []; order.push(p.x); }
+      byDate[p.x].push(p.y);
+    });
+    return order.map(function (x) {
+      var vals = byDate[x];
+      var avg = vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
+      return { x: x, y: avg, n: vals.length };
+    });
+  }
+
   function statusFor(value, meta) {
     if (value === null || value === undefined || !meta) return null;
     if (meta.dir === "hi") {
@@ -315,7 +333,8 @@
       pts.forEach(function (p, i) {
         var st = statusFor(p.y, meta) || "good";
         var isLast = i === pts.length - 1;
-        svg.push('<circle cx="' + xPos(p.x).toFixed(1) + '" cy="' + yPos(p.y).toFixed(1) + '" r="' + (isLast ? 4.5 : 3.4) + '" fill="var(--' + st + ')" stroke="' + color + '" stroke-width="1.6"><title>' + fmtDateShort(p.x) + ": " + fmtNum(p.y) + " " + (unit || "") + " (" + s.label + ")</title></circle>");
+        var ptLabel = fmtDateShort(p.x) + ": " + fmtNum(p.y) + " " + (unit || "") + " (" + s.label + ")" + (p.n > 1 ? " · promedio de " + p.n + " muestras" : "");
+        svg.push('<circle cx="' + xPos(p.x).toFixed(1) + '" cy="' + yPos(p.y).toFixed(1) + '" r="' + (isLast ? 4.5 : 3.4) + '" fill="var(--' + st + ')" stroke="' + color + '" stroke-width="1.6"><title>' + esc(ptLabel) + "</title></circle>");
         if (isLast) {
           svg.push('<text x="' + (xPos(p.x) + 8).toFixed(1) + '" y="' + (yPos(p.y) - 8).toFixed(1) + '" font-size="11" font-weight="700" fill="var(--ink)">' + fmtNum(p.y) + "</text>");
         }
@@ -456,7 +475,7 @@
         if (!byGroup[tk]) byGroup[tk] = [];
         byGroup[tk].push({ x: r.fecha, y: v });
       });
-      var seriesList = Object.keys(byGroup).map(function (k) { return { label: k, points: byGroup[k] }; });
+      var seriesList = Object.keys(byGroup).map(function (k) { return { label: k, points: aggregateByDate(byGroup[k]) }; });
       var legendHtml = "";
       if (seriesList.length > 1) {
         legendHtml = '<div class="legend">' + seriesList.map(function (s) {

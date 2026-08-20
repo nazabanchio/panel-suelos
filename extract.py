@@ -2,7 +2,7 @@ import openpyxl, json, re, unicodedata, datetime, os, shutil
 from collections import defaultdict, Counter
 
 BASE_XLSX = "/Users/joaquinbanchio/Desktop/Trabajo Papi/Analisis suelos"
-SRC_FILE = "Analisis_Suelos_UNIFICADO_v7.xlsx"
+SRC_FILE = "UNIFICADO_v8 (no coprimido y sin pocos datos).xlsx"
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def campana_fallback_date(campana):
@@ -365,7 +365,12 @@ for i in range(len(all_keys)):
 
         strong = jac >= 0.5 and is_subset and safe
         matched = False
-        if dist_inter and (strong or (len(inter) >= 2 and safe and not is_subset)):
+        # non-subset case: even a single shared token is trustworthy as long
+        # as it's genuinely distinctive (dist_inter, checked above) AND both
+        # sides' remainders are pure filler (safe) -- e.g. "Nino Norte" vs
+        # "Nino Sur" share only "Nino", but Norte/Sur carry zero risk of
+        # meaning a different place, so one shared rare word is enough.
+        if dist_inter and (strong or (safe and not is_subset)):
             matched = True
         elif (inter and ("COL" in atoks or "COL" in btoks) and same_operator(ak[1], bk[1])
               and inter == smaller
