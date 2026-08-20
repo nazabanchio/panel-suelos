@@ -220,6 +220,15 @@ def read_sheet(sheet_name, dataset, param_map):
 
 chem_rows = read_sheet("Laboratorios", "quimico", CHEM_PARAM_MAP)
 bio_rows = read_sheet("TecnoSustrato", "biologico", BIO_PARAM_MAP)
+
+# Manual corrections requested directly (not present in the source sheet).
+# Each entry pins the exact row so nothing else can be touched by accident.
+for r in chem_rows:
+    if (r["lote"] == "CAPILLA" and r["productor"] == "Banchio Diego"
+            and r["fecha"] == "2026-06-17" and r["lab"] == "AFA Planta Formuladora"
+            and r["tipo"] == "Químico"):
+        r["tipo"] = None
+
 rows = chem_rows + bio_rows
 
 n_chem = len(chem_rows)
