@@ -36,14 +36,25 @@ opcional (por ejemplo un link de Google Drive) que reemplaza al link local a
 `reports/` para ese análisis. Quedan marcadas con una `_nota` explicando de
 dónde salieron y qué se asumió (conversión de unidades, campaña inferida,
 etc.). Cuando el dato termine apareciendo en un Excel nuevo, hay que sacar la
-entrada correspondiente de `manual_entries.json` para no duplicarla.
+entrada correspondiente de `manual_entries.json` para no duplicarla (por
+ejemplo, la entrada de Anahuac/Lote 5 se sacó al llegar el v9 porque ya
+estaba en el Excel maestro).
+
+**Los lotes con nombre genérico ("Lote Único", etc.) nunca sirven de
+evidencia para fusionar entre productores distintos.** Si el nombre de un
+lote está compuesto enteramente por palabras genéricas ("lote", "único"...),
+`normalize_core()` le asigna un núcleo vacío en vez de usar el nombre crudo
+como respaldo — así "Lote Único" de un productor nunca queda igualado a
+"Lote Único" de otro productor solo por casualidad de nomenclatura. La
+fusión dentro de un mismo productor sigue funcionando igual (usa también el
+nombre del productor como parte de la clave).
 
 ## Archivos
 
 - `index.html` — la página final, autocontenida (esto es lo que se publica).
 - `template.html` / `app.js` / `data.json` — piezas fuente que arman `index.html`.
-- `extract.py` — script que lee "UNIFICADO_v8 (no coprimido y sin pocos
-  datos).xlsx", hojas "Laboratorios" y "TecnoSustrato" por separado, suma lo
+- `extract.py` — script que lee "Analisis_Suelos_UNIFICADO_v9.xlsx", hojas
+  "Laboratorios" y "TecnoSustrato" por separado, suma lo
   que haya en `manual_entries.json`, y genera `data.json`. Agrupa por
   campo/lote *dentro de cada hoja* y fusiona automáticamente los lotes que
   comparten nombre entre laboratorios del mismo estudio (con reglas
@@ -52,6 +63,14 @@ entrada correspondiente de `manual_entries.json` para no duplicarla.
 - `manual_entries.json` — análisis cargados a mano desde un PDF suelto (ver
   arriba).
 - `build.py` — junta `template.html` + `app.js` + `data.json` en `index.html`.
+
+**La tabla de análisis por lote tiene el encabezado fijo** (se queda visible
+al bajar con el mouse) y **los gráficos de evolución muestran el valor en
+cada punto**, no solo en el último, alternando arriba/abajo para no
+superponerse. El color de línea Biológico (verde) y Químico (azul) usa tonos
+bien distintos entre sí, y las fechas debajo del gráfico se muestran en
+tamaño más grande y color más oscuro para que se lean fácil impresas o en
+pantallas chicas.
 
 ## Actualizar los datos
 

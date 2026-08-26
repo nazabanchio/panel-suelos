@@ -2,7 +2,7 @@ import openpyxl, json, re, unicodedata, datetime, os, shutil
 from collections import defaultdict, Counter
 
 BASE_XLSX = "/Users/joaquinbanchio/Desktop/Trabajo Papi/Analisis suelos"
-SRC_FILE = "UNIFICADO_v8 (no coprimido y sin pocos datos).xlsx"
+SRC_FILE = "Analisis_Suelos_UNIFICADO_v9.xlsx"
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 def campana_fallback_date(campana):
@@ -106,8 +106,16 @@ def normalize_core(name):
             continue
         kept.append(tt)
     core = " ".join(kept).strip()
-    if core == "":
-        core = s
+    # NOTE: deliberately do NOT fall back to the un-stripped string `s` when
+    # every token was a stopword (e.g. "Lote Único", "Lote Unico"). That used
+    # to reintroduce "LOTE"/"UNICO" as if they were real, and every producer
+    # whose only field is generically named "Lote Único" ended up sharing an
+    # identical lote_core -- which then made two total strangers (different
+    # productor, same placeholder name) look like the same physical field to
+    # the merge step below. An empty core still groups correctly *within* one
+    # productor (group_key includes productor), it just can't be used as
+    # cross-productor matching evidence, which is exactly what a name this
+    # generic should never provide.
     return core, tipo_found
 
 def sig_tokens(core):

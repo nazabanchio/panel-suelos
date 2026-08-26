@@ -321,23 +321,25 @@
       if (label === lastLabel) return;
       lastLabel = label;
       var x = xPos(d);
-      svg.push('<text x="' + x.toFixed(1) + '" y="' + (H - MB + 16) + '" text-anchor="middle" font-size="10" fill="var(--ink-faint)">' + esc(label) + "</text>");
+      svg.push('<text x="' + x.toFixed(1) + '" y="' + (H - MB + 18) + '" text-anchor="middle" font-size="13" font-weight="600" fill="var(--ink)">' + esc(label) + "</text>");
     });
 
-    seriesList.forEach(function (s) {
+    seriesList.forEach(function (s, sIdx) {
       var pts = s.points.slice().sort(function (a, b) { return a.x < b.x ? -1 : 1; });
       if (!pts.length) return;
       var color = TIPO_COLORS[s.label] || "var(--series-general)";
+      // when two series share a date, their labels would land on the exact
+      // same spot -- alternate above/below by series so both stay readable
+      var labelAbove = sIdx % 2 === 0;
       var path = pts.map(function (p, i) { return (i === 0 ? "M" : "L") + xPos(p.x).toFixed(1) + "," + yPos(p.y).toFixed(1); }).join(" ");
-      svg.push('<path d="' + path + '" fill="none" stroke="' + color + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />');
+      svg.push('<path d="' + path + '" fill="none" stroke="' + color + '" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />');
       pts.forEach(function (p, i) {
         var st = statusFor(p.y, meta) || "good";
         var isLast = i === pts.length - 1;
         var ptLabel = fmtDateShort(p.x) + ": " + fmtNum(p.y) + " " + (unit || "") + " (" + s.label + ")" + (p.n > 1 ? " · promedio de " + p.n + " muestras" : "");
         svg.push('<circle cx="' + xPos(p.x).toFixed(1) + '" cy="' + yPos(p.y).toFixed(1) + '" r="' + (isLast ? 4.5 : 3.4) + '" fill="var(--' + st + ')" stroke="' + color + '" stroke-width="1.6"><title>' + esc(ptLabel) + "</title></circle>");
-        if (isLast) {
-          svg.push('<text x="' + (xPos(p.x) + 8).toFixed(1) + '" y="' + (yPos(p.y) - 8).toFixed(1) + '" font-size="11" font-weight="700" fill="var(--ink)">' + fmtNum(p.y) + "</text>");
-        }
+        var labelY = labelAbove ? yPos(p.y) - 9 : yPos(p.y) + 17;
+        svg.push('<text x="' + xPos(p.x).toFixed(1) + '" y="' + labelY.toFixed(1) + '" text-anchor="middle" font-size="10.5" font-weight="' + (isLast ? 700 : 600) + '" fill="' + (isLast ? "var(--ink)" : color) + '">' + fmtNum(p.y) + "</text>");
       });
     });
 
