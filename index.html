@@ -171,11 +171,18 @@
     align-items: center;
     box-shadow: var(--shadow);
   }
-  .search-box {
-    position: relative;
+  .search-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     flex: 1 1 240px;
     min-width: 200px;
   }
+  .search-box {
+    position: relative;
+    width: 100%;
+  }
+  .search-stack select.sel { width: 100%; }
   .search-box svg {
     position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
     width: 15px; height: 15px; color: var(--ink-faint); pointer-events: none;
@@ -408,9 +415,12 @@
   </header>
 
   <div class="controls">
-    <div class="search-box">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-      <input type="text" id="searchInput" placeholder="Buscar campo, lote o productor…" autocomplete="off">
+    <div class="search-stack">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="searchInput" placeholder="Buscar campo, lote o productor…" autocomplete="off">
+      </div>
+      <select class="sel" id="productorFilter"></select>
     </div>
     <div class="chipgroup" id="datasetFilter">
       <span class="glabel">Estudio</span>
@@ -418,7 +428,6 @@
     <div class="chipgroup" id="tipoFilter">
       <span class="glabel">Manejo</span>
     </div>
-    <select class="sel" id="productorFilter"></select>
     <select class="sel" id="sortSelect">
       <option value="nombre">Ordenar: Nombre A-Z</option>
       <option value="fecha">Ordenar: Más reciente</option>
