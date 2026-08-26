@@ -40,6 +40,15 @@ entrada correspondiente de `manual_entries.json` para no duplicarla (por
 ejemplo, la entrada de Anahuac/Lote 5 se sacó al llegar el v9 porque ya
 estaba en el Excel maestro).
 
+**El link al informe ("Ver PDF") busca el archivo fuente por nombre,
+probando tanto PDF como XLS** (algunos informes recientes de Molisol solo
+existen como .xls), y usa la primera línea si la celda de origen lista dos
+archivos (análisis + "Enmiendas"). Para los informes de AgLab (Agro Ideas)
+de Banchio Diego, el Excel no trae un nombre de archivo real (solo repite el
+nombre del lote), así que están vinculados a mano por ID de Drive en
+`extract.py` (bloque `AGLAB_INFORME_URLS`), apuntando a la carpeta
+compartida de Agro Ideas.
+
 **Los lotes con nombre genérico ("Lote Único", etc.) nunca sirven de
 evidencia para fusionar entre productores distintos.** Si el nombre de un
 lote está compuesto enteramente por palabras genéricas ("lote", "único"...),

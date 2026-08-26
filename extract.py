@@ -237,6 +237,48 @@ for r in chem_rows:
             and r["tipo"] == "Químico"):
         r["tipo"] = None
 
+# "Lote 5" naming fix: AgLab's rows for this Banchio Diego field spell it
+# "Lote 5" while every other lab (AFA, Molisol) calls the exact same
+# physical field "Col 5", matching the "Col 4" / "Col 3" / etc. convention
+# used across the rest of his fields. Canonicalized here so the campo always
+# displays "Col 5" (AgLab has more rows than AFA/Molisol combined, so
+# without this the majority-vote display name flips to the odd one out).
+for r in chem_rows:
+    if r["productor"] == "Banchio Diego" and r["lote"] == "LOTE 5":
+        r["lote"] = "COL 5"
+        r["lote_core"], _ = normalize_core(r["lote"])
+
+# AgLab (Agro Ideas) report links: AgLab's own "Archivo/Informe" column for
+# these rows is just the lot name repeated, not a real per-report reference
+# (see the local-PDF linking comment further down), so the usual
+# filename-match linking can never find these. The real AgLab diagnostic
+# PDFs live in a separate Drive folder instead of the local PDF tree:
+# https://drive.google.com/drive/folders/1vLGQKkq6FRr7aqAifU4EHc_d_VN66VtV
+# Linked here by exact Drive file ID, keyed by (productor, lote, fecha)
+# since "informe" alone can't tell two dates of the same lot apart. Note:
+# "Col 4" and "Col 5" each have two Drive files with an identical name
+# ("... (1).pdf" vs. no suffix) and no date inside the filename or the PDF
+# itself -- assumed the plain-named file is the earlier (2022-12-15) upload
+# and the "(1)" file is the later (2025-12-15) one, per Drive's own
+# duplicate-name convention (first upload keeps the plain name, a later
+# upload of the same name gets "(1)"). Unverified; swap the two URLs below
+# for a given lot if this turns out backwards.
+AGLAB_INFORME_URLS = {
+    ("Banchio Diego", "ANGELICA 1", "2022-12-15"): "https://drive.google.com/file/d/1E4-OexiHHZkhiLXWicAd01tHxciIvtbG/view",
+    ("Banchio Diego", "ANGELICA 2", "2022-12-15"): "https://drive.google.com/file/d/1_0uk7fNLVb7LOIoEtBjfnKOI1b2ODtp2/view",
+    ("Banchio Diego", "ANGELICA 3", "2023-06-15"): "https://drive.google.com/file/d/1gPdOH2IsORvTM0KNFPMZmuE5834MRr-I/view",
+    ("Banchio Diego", "COL 4", "2022-12-15"): "https://drive.google.com/file/d/1OtpeYgsLC9SNnSi856kIT5zpxPHoB54U/view",
+    ("Banchio Diego", "COL 4", "2025-12-15"): "https://drive.google.com/file/d/1T8inEOi9R5I8RoctX0i2AYHN2T0VK0AZ/view",
+    ("Banchio Diego", "COL 5", "2022-12-15"): "https://drive.google.com/file/d/1Gv8_wCwmjNrRASoup4yly31ijiVrYdSM/view",
+    ("Banchio Diego", "COL 5", "2025-12-15"): "https://drive.google.com/file/d/1jQ6-gReN9ifIpCpB3MH7gRk4YHRjLq88/view",
+}
+for r in chem_rows:
+    if r["lab"] != "AgLab":
+        continue
+    url = AGLAB_INFORME_URLS.get((r["productor"], r["lote"], r["fecha"]))
+    if url:
+        r["informe_url"] = url
+
 # ---------- MANUAL ENTRIES ----------
 # Analyses sent to us directly as a standalone PDF, not (yet) in the master
 # Excel. Kept in their own file and re-applied on every extraction so a
@@ -284,34 +326,42 @@ n_chem = len(chem_rows)
 n_bio = len(bio_rows)
 print("chem rows:", n_chem, "| bio rows:", n_bio, "| total:", len(rows))
 
-# ---------- LINK SOURCE PDF REPORTS ----------
-# "informe" is a mix of real report codes (S23-0102 B), real PDF filenames
-# (Banchio 526 (1).pdf), and -- for many rows -- just the lot name again,
-# which is NOT a document reference. Only link when a PDF's filename
-# uniquely contains the informe string, and never when the only candidate is
-# a climate report that happens to also mention the lot name.
+# ---------- LINK SOURCE PDF/XLS REPORTS ----------
+# "informe" is a mix of real report codes (S23-0102 B), real filenames
+# (Banchio 526 (1).pdf), a few cells listing two filenames on separate lines
+# (primary analysis + an "Enmiendas" appendix -- only the first/primary one
+# is linked, since a row can only carry one link), and -- for many rows --
+# just the lot name again, which is NOT a document reference. Only link when
+# a source file's filename uniquely contains the informe string, and never
+# when the only candidate is a climate report that happens to also mention
+# the lot name. Most source files are PDFs; Molisol's raw lab output for
+# recent campaigns is .xls instead, so both extensions are searched.
 REPORTS_SRC_EXCLUDE_DIRS = {"panel-suelos-web"}
 REPORTS_EXCLUDE_KEYWORDS = ["climatol", "clima"]
 REPORTS_OUT_DIR = os.path.join(OUT_DIR, "reports")
+REPORT_EXTENSIONS = (".pdf", ".xls", ".xlsx")
 
 def _norm_fname(s):
     return re.sub(r"[\s_\-]+", " ", s).strip().lower()
 
-all_pdfs = []
+all_docs = []
 for root, dirs, files in os.walk(BASE_XLSX):
     if any(ex in root for ex in REPORTS_SRC_EXCLUDE_DIRS):
         continue
     for f in files:
-        if f.lower().endswith(".pdf"):
-            all_pdfs.append(os.path.join(root, f))
+        if f.lower().endswith(REPORT_EXTENSIONS):
+            all_docs.append(os.path.join(root, f))
 
 informe_to_path = {}
 for r in rows:
     inf = r.get("informe")
     if not inf or inf in informe_to_path:
         continue
-    inf_n = _norm_fname(inf)
-    candidates = [p for p in all_pdfs if inf_n in _norm_fname(os.path.basename(p))]
+    inf_primary = inf.split("\n")[0].strip()
+    if not inf_primary:
+        continue
+    inf_n = _norm_fname(inf_primary)
+    candidates = [p for p in all_docs if inf_n in _norm_fname(os.path.basename(p))]
     candidates = [p for p in candidates if not any(k in _norm_fname(os.path.basename(p)) for k in REPORTS_EXCLUDE_KEYWORDS)]
     if len(candidates) == 1:
         informe_to_path[inf] = candidates[0]
@@ -321,7 +371,8 @@ if os.path.isdir(REPORTS_OUT_DIR):
 os.makedirs(REPORTS_OUT_DIR, exist_ok=True)
 informe_to_slug = {}
 for i, (inf, src_path) in enumerate(sorted(informe_to_path.items())):
-    slug = f"report_{i:03d}.pdf"
+    ext = os.path.splitext(src_path)[1].lower()
+    slug = f"report_{i:03d}{ext}"
     shutil.copyfile(src_path, os.path.join(REPORTS_OUT_DIR, slug))
     informe_to_slug[inf] = f"reports/{slug}"
 
