@@ -1,0 +1,28 @@
+[
+  {
+    "dataset": "quimico",
+    "lab": "AFA Planta Formuladora",
+    "informe": "S26-0896 A",
+    "informe_url": "https://drive.google.com/file/d/14Bmk_98RPMpIPJGRF5q7TciXLsZk5TFn/view",
+    "productor_raw": "Anahuac",
+    "localidad": "Cañada Rosquín, Santa Fe",
+    "lote_raw": "LOTE 5 OVIDIO",
+    "manejo_tipo": null,
+    "muestra": null,
+    "profundidad_raw": "0-20",
+    "fecha_raw": "29/07/2026",
+    "campana": "2026/2027",
+    "params": {
+      "pH": 5.7,
+      "CE": 50,
+      "MO": 2.6,
+      "C_Org": 1.2,
+      "N_NO3": 4.7,
+      "P_BrayI": 28.2,
+      "Azufre_S": 10.5
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde 'INFORME ANALISIS DE SUELOS S26-0896 A.pdf' (AFA), no está en el Excel maestro. CE convertida de 0,05 dS/m a 50 µS/cm. Campaña 2026/2027 es una inferencia (el PDF no la indica) por la fecha de muestreo (29/7/2026). Sin Score/Clasificación ponderada porque el PDF no la calcula."
+  }
+]

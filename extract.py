@@ -229,6 +229,47 @@ for r in chem_rows:
             and r["tipo"] == "Químico"):
         r["tipo"] = None
 
+# ---------- MANUAL ENTRIES ----------
+# Analyses sent to us directly as a standalone PDF, not (yet) in the master
+# Excel. Kept in their own file and re-applied on every extraction so a
+# future "here's the new Excel" doesn't silently drop them.
+MANUAL_ENTRIES_PATH = os.path.join(OUT_DIR, "manual_entries.json")
+
+def load_manual_entries():
+    if not os.path.isfile(MANUAL_ENTRIES_PATH):
+        return []
+    with open(MANUAL_ENTRIES_PATH, encoding="utf-8") as f:
+        entries = json.load(f)
+    out = []
+    for e in entries:
+        lote_raw = e["lote_raw"]
+        core, tipo_from_lote = normalize_core(lote_raw)
+        out.append({
+            "dataset": e["dataset"],
+            "lab": e["lab"],
+            "informe": e.get("informe"),
+            "informe_url": e.get("informe_url"),
+            "productor": norm_prod(e.get("productor_raw")),
+            "localidad": e.get("localidad"),
+            "lote": lote_raw,
+            "lote_core": core,
+            "tipo": e.get("manejo_tipo") or tipo_from_lote,
+            "muestra": e.get("muestra"),
+            "prof": norm_prof(e.get("profundidad_raw")),
+            "fecha": clean_date(e.get("fecha_raw")),
+            "fecha_is_estimate": False,
+            "campana": e.get("campana"),
+            "params": dict(e.get("params") or {}),
+            "score": e.get("score"),
+            "clasificacion": e.get("clasificacion"),
+        })
+    return out
+
+manual_rows = load_manual_entries()
+chem_rows += [r for r in manual_rows if r["dataset"] == "quimico"]
+bio_rows += [r for r in manual_rows if r["dataset"] == "biologico"]
+print("manual entries loaded:", len(manual_rows))
+
 rows = chem_rows + bio_rows
 
 n_chem = len(chem_rows)
@@ -277,7 +318,7 @@ for i, (inf, src_path) in enumerate(sorted(informe_to_path.items())):
     informe_to_slug[inf] = f"reports/{slug}"
 
 for r in rows:
-    r["informe_file"] = informe_to_slug.get(r.get("informe"))
+    r["informe_file"] = r.get("informe_url") or informe_to_slug.get(r.get("informe"))
 
 print("linked source reports:", len(informe_to_slug), "of", len(set(r["informe"] for r in rows if r.get("informe"))), "distinct informes")
 
