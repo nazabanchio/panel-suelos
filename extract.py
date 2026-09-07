@@ -336,7 +336,17 @@ print("chem rows:", n_chem, "| bio rows:", n_bio, "| total:", len(rows))
 # when the only candidate is a climate report that happens to also mention
 # the lot name. Most source files are PDFs; Molisol's raw lab output for
 # recent campaigns is .xls instead, so both extensions are searched.
-REPORTS_SRC_EXCLUDE_DIRS = {"panel-suelos-web"}
+REPORTS_SRC_EXCLUDE_DIRS = {
+    "panel-suelos-web",
+    # Colombero re-sampled several lots on 31/8/2026 reusing the exact same
+    # filenames as an earlier date (e.g. "COLOMBERO NINO NORTE 0-20 CM.pdf"),
+    # so with this folder included the by-filename search finds two matches
+    # for that name and gives up (ambiguous) for BOTH dates. These rows are
+    # already linked explicitly via informe_url in manual_entries.json, so
+    # excluding the folder here just restores a unique match for the older,
+    # non-manual row that shares the same filename.
+    "Lab Molisol/Colombero/7:9:26",
+}
 REPORTS_EXCLUDE_KEYWORDS = ["climatol", "clima"]
 REPORTS_OUT_DIR = os.path.join(OUT_DIR, "reports")
 REPORT_EXTENSIONS = (".pdf", ".xls", ".xlsx")

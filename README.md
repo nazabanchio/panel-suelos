@@ -40,6 +40,15 @@ entrada correspondiente de `manual_entries.json` para no duplicarla (por
 ejemplo, la entrada de Anahuac/Lote 5 se sacó al llegar el v9 porque ya
 estaba en el Excel maestro).
 
+**Un mismo lote puede tener varios puntos de muestreo de variabilidad**
+(por ejemplo "Eucaliptus 1 Krey" de A Y N Colombero, muestreado en los
+puntos Este/Medio/Oeste/Manchones el mismo día). Estos no son lotes
+distintos: se cargan todos con el mismo `lote_raw` y se usa el campo
+`muestra` para anotar el punto, así quedan en la misma ficha en vez de
+fragmentarse en campos nuevos. El gráfico de evolución los promedia por
+fecha (igual que las sub-muestras de AgLab); la tabla los sigue mostrando
+por separado.
+
 **El link al informe ("Ver PDF") busca el archivo fuente por nombre,
 probando tanto PDF como XLS** (algunos informes recientes de Molisol solo
 existen como .xls), y usa la primera línea si la celda de origen lista dos
