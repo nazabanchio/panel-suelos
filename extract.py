@@ -258,6 +258,16 @@ for r in bio_rows:
         r["lote"] = "Eucaliptus Krey 1"
         r["lote_core"], _ = normalize_core(r["lote"])
 
+# "Eucaliptus 1 Krey" (químico, full-panel analysis) folded into the same
+# campo as "Eucaliptus Krey Variabilidad" -- requested by the user, who
+# wants both under one ficha with no separate marker for these two rows
+# (they keep muestra=None, same as before; only Este/Medio/Oeste/Manchones
+# carry a muestra tag).
+for r in chem_rows:
+    if r["productor"] == "A Y N Colombero" and r["lote"] == "EUCALIPTUS 1 KREY":
+        r["lote"] = "EUCALIPTUS KREY VARIABILIDAD"
+        r["lote_core"], _ = normalize_core(r["lote"])
+
 # AgLab (Agro Ideas) report links: AgLab's own "Archivo/Informe" column for
 # these rows is just the lot name repeated, not a real per-report reference
 # (see the local-PDF linking comment further down), so the usual
@@ -398,6 +408,30 @@ for i, (inf, src_path) in enumerate(sorted(informe_to_path.items())):
 
 for r in rows:
     r["informe_file"] = r.get("informe_url") or informe_to_slug.get(r.get("informe"))
+
+# TecnoSustrato bundles several lots of the same producer/date into ONE
+# multi-page PDF (a fixed number of pages per lot, repeated). Every lot in
+# the bundle correctly links to the same PDF, but without a page number
+# they all open on page 1 -- which reads as "wrong document" for every lot
+# except whichever one happens to be first. Appended here as a #page=N
+# fragment (supported by browser PDF viewers and Google Drive's viewer).
+BIO_PAGE_ANCHORS = {
+    # "Informe de Laboratorio - Colombero 0925 (1).pdf" -- 7 lots x 3 pages
+    ("A Y N Colombero", "Pino 95 Ha", "2025-09-15"): 1,
+    ("A Y N Colombero", "Eucaliptus 7 Ha", "2025-09-15"): 4,
+    ("A Y N Colombero", "Eucaliptus Krey 1", "2025-09-15"): 7,
+    ("A Y N Colombero", "Sauce 28 Ha", "2025-09-15"): 10,
+    ("A Y N Colombero", "Sauce 72 Ha", "2025-09-15"): 13,
+    ("A Y N Colombero", "San Alberto Norte", "2025-09-15"): 16,
+    ("A Y N Colombero", "Nino", "2025-09-15"): 19,
+    # "COLOMBERO LOTE PINO Y VIETTO (1).pdf" -- 2 lots x 4 pages
+    ("A Y N Colombero", "El Pino", "2024-07-01"): 1,
+    ("A Y N Colombero", "Vietto", "2024-07-01"): 5,
+}
+for r in bio_rows:
+    page = BIO_PAGE_ANCHORS.get((r["productor"], r["lote"], r["fecha"]))
+    if page and r.get("informe_file"):
+        r["informe_file"] += f"#page={page}"
 
 print("linked source reports:", len(informe_to_slug), "of", len(set(r["informe"] for r in rows if r.get("informe"))), "distinct informes")
 
