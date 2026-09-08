@@ -12,7 +12,15 @@
     "profundidad_raw": "0-20",
     "fecha_raw": "2026-08-11",
     "campana": "2026/2027",
-    "params": { "pH": 6.6, "CE": 120, "MO": 2.1, "C_Org": 0.9, "N_NO3": 13.0, "P_BrayI": 13.2, "Azufre_S": 21.4 },
+    "params": {
+      "pH": 6.6,
+      "CE": 120,
+      "MO": 2.1,
+      "C_Org": 0.9,
+      "N_NO3": 13.0,
+      "P_BrayI": 13.2,
+      "Azufre_S": 21.4
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF AFA local (INFORME ANALISIS DE SUELOS S26-0964 A.pdf, AFA/Anahuac/), 2026-08-31. Campaña 2026/2027 inferida a partir de la fecha de muestreo (11/8/2026); no viene indicada en el informe. Conductividad convertida de dS/m (0,12 en el PDF) a µS/cm (x1000) para igualar la unidad usada en el resto del panel. Sacar esta entrada cuando el dato llegue en un Excel maestro nuevo."
@@ -30,7 +38,15 @@
     "profundidad_raw": "20-40",
     "fecha_raw": "2026-08-11",
     "campana": "2026/2027",
-    "params": { "pH": 7.7, "CE": 300, "MO": 1.1, "C_Org": 0.5, "N_NO3": 3.8, "P_BrayI": 10.9, "Azufre_S": 56.3 },
+    "params": {
+      "pH": 7.7,
+      "CE": 300,
+      "MO": 1.1,
+      "C_Org": 0.5,
+      "N_NO3": 3.8,
+      "P_BrayI": 10.9,
+      "Azufre_S": 56.3
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF AFA local (INFORME ANALISIS DE SUELOS S26-0964 B.pdf, AFA/Anahuac/), 2026-08-31. Campaña 2026/2027 inferida a partir de la fecha de muestreo (11/8/2026); no viene indicada en el informe. Conductividad convertida de dS/m (0,30 en el PDF) a µS/cm (x1000). Sacar esta entrada cuando el dato llegue en un Excel maestro nuevo."
@@ -48,7 +64,15 @@
     "profundidad_raw": "0-20",
     "fecha_raw": "2026-08-11",
     "campana": "2026/2027",
-    "params": { "pH": 6.2, "CE": 130, "MO": 2.0, "C_Org": 0.9, "N_NO3": 20.8, "P_BrayI": 23.8, "Azufre_S": 20.1 },
+    "params": {
+      "pH": 6.2,
+      "CE": 130,
+      "MO": 2.0,
+      "C_Org": 0.9,
+      "N_NO3": 20.8,
+      "P_BrayI": 23.8,
+      "Azufre_S": 20.1
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF AFA local (INFORME ANALISIS DE SUELOS S26-0965 A.pdf, AFA/Anahuac/), 2026-08-31. Campaña 2026/2027 inferida a partir de la fecha de muestreo (11/8/2026); no viene indicada en el informe. Conductividad convertida de dS/m (0,13 en el PDF) a µS/cm (x1000). Sacar esta entrada cuando el dato llegue en un Excel maestro nuevo."
@@ -66,7 +90,15 @@
     "profundidad_raw": "20-40",
     "fecha_raw": "2026-08-11",
     "campana": "2026/2027",
-    "params": { "pH": 8.0, "CE": 260, "MO": 1.2, "C_Org": 0.5, "N_NO3": 4.2, "P_BrayI": 11.6, "Azufre_S": 47.4 },
+    "params": {
+      "pH": 8.0,
+      "CE": 260,
+      "MO": 1.2,
+      "C_Org": 0.5,
+      "N_NO3": 4.2,
+      "P_BrayI": 11.6,
+      "Azufre_S": 47.4
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF AFA local (INFORME ANALISIS DE SUELOS S26-0965 B.pdf, AFA/Anahuac/), 2026-08-31. Campaña 2026/2027 inferida a partir de la fecha de muestreo (11/8/2026); no viene indicada en el informe. Conductividad convertida de dS/m (0,26 en el PDF) a µS/cm (x1000). Sacar esta entrada cuando el dato llegue en un Excel maestro nuevo."
@@ -84,7 +116,17 @@
     "profundidad_raw": "0-20",
     "fecha_raw": "2026-08-31",
     "campana": "26/27",
-    "params": { "pH": 6.2, "CE": 58, "MO": 2.4, "C_Org": 1.39, "N_Total": 0.12, "N_NO3": 15.5, "P_BrayI": 19.1, "P_Total": 486.0, "Azufre_S": 10.3 },
+    "params": {
+      "pH": 6.2,
+      "CE": 58,
+      "MO": 2.4,
+      "C_Org": 1.39,
+      "N_Total": 0.12,
+      "N_NO3": 15.5,
+      "P_BrayI": 19.1,
+      "P_Total": 486.0,
+      "Azufre_S": 10.3
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO ALGARROBO NORTE 0-20 CM.pdf), campo nuevo. Sacar esta entrada cuando el dato llegue en un Excel maestro nuevo."
@@ -102,7 +144,17 @@
     "profundidad_raw": "20-40",
     "fecha_raw": "2026-08-31",
     "campana": "26/27",
-    "params": { "pH": 6.3, "CE": 61, "MO": 1.2, "C_Org": 0.7, "N_Total": 0.11, "N_NO3": 7.2, "P_BrayI": 8.0, "P_Total": 326.0, "Azufre_S": 5.3 },
+    "params": {
+      "pH": 6.3,
+      "CE": 61,
+      "MO": 1.2,
+      "C_Org": 0.7,
+      "N_Total": 0.11,
+      "N_NO3": 7.2,
+      "P_BrayI": 8.0,
+      "P_Total": 326.0,
+      "Azufre_S": 5.3
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO ALGARROBO NORTE 20-40 CM.pdf), campo nuevo. Sacar esta entrada cuando el dato llegue en un Excel maestro nuevo."
@@ -114,16 +166,19 @@
     "informe_url": "https://drive.google.com/file/d/1bCH44eSGOJNhrJVTOunGnMAUDYnAUjXw/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Este",
     "profundidad_raw": "0-20",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 27.0, "Azufre_S": 9.0 },
+    "params": {
+      "P_BrayI": 27.0,
+      "Azufre_S": 9.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY ESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Este', dentro del mismo campo Eucaliptus 1 Krey (no es un lote distinto). Solo trae P y S por profundidad. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY ESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Este', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae P y S por profundidad. Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -132,16 +187,19 @@
     "informe_url": "https://drive.google.com/file/d/1bCH44eSGOJNhrJVTOunGnMAUDYnAUjXw/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Este",
     "profundidad_raw": "20-40",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 12.0, "Azufre_S": 4.0 },
+    "params": {
+      "P_BrayI": 12.0,
+      "Azufre_S": 4.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY ESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Este', dentro del mismo campo Eucaliptus 1 Krey (no es un lote distinto). Solo trae P y S por profundidad. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY ESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Este', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae P y S por profundidad. Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -150,16 +208,19 @@
     "informe_url": "https://drive.google.com/file/d/1bCH44eSGOJNhrJVTOunGnMAUDYnAUjXw/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Este",
     "profundidad_raw": "40-60",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 6.0, "Azufre_S": 3.0 },
+    "params": {
+      "P_BrayI": 6.0,
+      "Azufre_S": 3.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY ESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Este', dentro del mismo campo Eucaliptus 1 Krey (no es un lote distinto). Solo trae P y S por profundidad. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY ESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Este', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae P y S por profundidad. Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -168,16 +229,20 @@
     "informe_url": "https://drive.google.com/file/d/1zEkrk5FDMbQiayBvQLuApq8x2iL75Ccr/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Manchones con trigo más desarrollado",
     "profundidad_raw": "0-20",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 50.5, "Azufre_S": 16.0, "N_NO3": 20.3 },
+    "params": {
+      "P_BrayI": 50.5,
+      "Azufre_S": 16.0,
+      "N_NO3": 20.3
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MANCHONES CON TRIGO MAS DESARROLLADO.pdf). Punto de muestreo de variabilidad interna (manchón con trigo más desarrollado), dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MANCHONES CON TRIGO MAS DESARROLLADO.pdf). Punto de muestreo de variabilidad interna (manchón con trigo más desarrollado), en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -186,16 +251,20 @@
     "informe_url": "https://drive.google.com/file/d/1zEkrk5FDMbQiayBvQLuApq8x2iL75Ccr/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Manchones con trigo más desarrollado",
     "profundidad_raw": "20-40",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 22.6, "Azufre_S": 10.0, "N_NO3": 10.8 },
+    "params": {
+      "P_BrayI": 22.6,
+      "Azufre_S": 10.0,
+      "N_NO3": 10.8
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MANCHONES CON TRIGO MAS DESARROLLADO.pdf). Punto de muestreo de variabilidad interna (manchón con trigo más desarrollado), dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MANCHONES CON TRIGO MAS DESARROLLADO.pdf). Punto de muestreo de variabilidad interna (manchón con trigo más desarrollado), en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -204,16 +273,20 @@
     "informe_url": "https://drive.google.com/file/d/1zEkrk5FDMbQiayBvQLuApq8x2iL75Ccr/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Manchones con trigo más desarrollado",
     "profundidad_raw": "40-60",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 19.0, "Azufre_S": 9.6, "N_NO3": 9.4 },
+    "params": {
+      "P_BrayI": 19.0,
+      "Azufre_S": 9.6,
+      "N_NO3": 9.4
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MANCHONES CON TRIGO MAS DESARROLLADO.pdf). Punto de muestreo de variabilidad interna (manchón con trigo más desarrollado), dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MANCHONES CON TRIGO MAS DESARROLLADO.pdf). Punto de muestreo de variabilidad interna (manchón con trigo más desarrollado), en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -222,16 +295,19 @@
     "informe_url": "https://drive.google.com/file/d/1bmb99ZUyN1jBSkhOUx_MX3c22NvmTBGj/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Medio",
     "profundidad_raw": "0-20",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 30.0, "Azufre_S": 6.0 },
+    "params": {
+      "P_BrayI": 30.0,
+      "Azufre_S": 6.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf). Punto de muestreo de variabilidad interna del lote 'Medio', dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf). Punto de muestreo de variabilidad interna del lote 'Medio', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -240,16 +316,19 @@
     "informe_url": "https://drive.google.com/file/d/1bmb99ZUyN1jBSkhOUx_MX3c22NvmTBGj/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Medio",
     "profundidad_raw": "20-40",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 20.2, "Azufre_S": 5.0 },
+    "params": {
+      "P_BrayI": 20.2,
+      "Azufre_S": 5.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf). Punto de muestreo de variabilidad interna del lote 'Medio', dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf). Punto de muestreo de variabilidad interna del lote 'Medio', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -258,16 +337,19 @@
     "informe_url": "https://drive.google.com/file/d/1bmb99ZUyN1jBSkhOUx_MX3c22NvmTBGj/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Medio",
     "profundidad_raw": "40-60",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 10.0, "Azufre_S": 4.8 },
+    "params": {
+      "P_BrayI": 10.0,
+      "Azufre_S": 4.8
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf). Punto de muestreo de variabilidad interna del lote 'Medio', dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf). Punto de muestreo de variabilidad interna del lote 'Medio', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -276,16 +358,19 @@
     "informe_url": "https://drive.google.com/file/d/198KdlKzLMtXSUxcqU9PwNueiRtjzKGTa/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Oeste",
     "profundidad_raw": "0-20",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 19.5, "Azufre_S": 5.0 },
+    "params": {
+      "P_BrayI": 19.5,
+      "Azufre_S": 5.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY OESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Oeste', dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY OESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Oeste', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -294,16 +379,19 @@
     "informe_url": "https://drive.google.com/file/d/198KdlKzLMtXSUxcqU9PwNueiRtjzKGTa/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Oeste",
     "profundidad_raw": "20-40",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 8.5, "Azufre_S": 4.5 },
+    "params": {
+      "P_BrayI": 8.5,
+      "Azufre_S": 4.5
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY OESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Oeste', dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY OESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Oeste', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -312,16 +400,19 @@
     "informe_url": "https://drive.google.com/file/d/198KdlKzLMtXSUxcqU9PwNueiRtjzKGTa/view",
     "productor_raw": "A Y N Colombero",
     "localidad": null,
-    "lote_raw": "EUCALIPTUS 1 KREY",
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
     "manejo_tipo": null,
     "muestra": "Oeste",
     "profundidad_raw": "40-60",
-    "fecha_raw": "2026-08-31",
+    "fecha_raw": "2026-09-01",
     "campana": "26/27",
-    "params": { "P_BrayI": 7.0, "Azufre_S": 4.0 },
+    "params": {
+      "P_BrayI": 7.0,
+      "Azufre_S": 4.0
+    },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY OESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Oeste', dentro del mismo campo Eucaliptus 1 Krey. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO EUCALIPTUS 1 KREY OESTE 8:26.pdf). Punto de muestreo de variabilidad interna del lote 'Oeste', en el lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo. Fecha corregida de 31/8 a 1/9/2026 a pedido del usuario, para que se distinga del muestreo de 6/8/2026 en el gráfico de evolución."
   },
   {
     "dataset": "quimico",
@@ -336,7 +427,10 @@
     "profundidad_raw": "0-20",
     "fecha_raw": "2026-08-31",
     "campana": "26/27",
-    "params": { "N_NO3": 16.0, "Azufre_S": 11.0 },
+    "params": {
+      "N_NO3": 16.0,
+      "Azufre_S": 11.0
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO NINO NORTE 0-20 CM.pdf), repite el nombre de un lote ya cargado (Nino Norte) para que quede en la misma ficha. Solo trae N-NO3 y S (panel liviano, no el análisis completo). Sacar cuando el dato llegue en un Excel maestro nuevo."
@@ -354,7 +448,10 @@
     "profundidad_raw": "20-40",
     "fecha_raw": "2026-08-31",
     "campana": "26/27",
-    "params": { "N_NO3": 8.3, "Azufre_S": 5.5 },
+    "params": {
+      "N_NO3": 8.3,
+      "Azufre_S": 5.5
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO NINO NORTE 20-40 CM.pdf), repite el nombre de un lote ya cargado (Nino Norte) para que quede en la misma ficha. Solo trae N-NO3 y S. Sacar cuando el dato llegue en un Excel maestro nuevo."
@@ -372,7 +469,10 @@
     "profundidad_raw": "0-20",
     "fecha_raw": "2026-08-31",
     "campana": "26/27",
-    "params": { "N_NO3": 14.1, "Azufre_S": 9.0 },
+    "params": {
+      "N_NO3": 14.1,
+      "Azufre_S": 9.0
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO NINO SUR 0-20 CM.pdf), Nino Sur se fusiona automáticamente con Nino Norte (misma ficha) por la regla de fusión ya existente. Solo trae N-NO3 y S. Sacar cuando el dato llegue en un Excel maestro nuevo."
@@ -390,9 +490,192 @@
     "profundidad_raw": "20-40",
     "fecha_raw": "2026-08-31",
     "campana": "26/27",
-    "params": { "N_NO3": 7.0, "Azufre_S": 4.8 },
+    "params": {
+      "N_NO3": 7.0,
+      "Azufre_S": 4.8
+    },
     "score": null,
     "clasificacion": null,
     "_nota": "Cargado a mano desde PDF Molisol (COLOMBERO NINO SUR 20-40 CM.pdf), Nino Sur se fusiona automáticamente con Nino Norte (misma ficha) por la regla de fusión ya existente. Solo trae N-NO3 y S. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY ESTE.pdf",
+    "informe_url": "https://drive.google.com/file/d/13Kg_odQAqHnpaNUazblfE92A-DY6qa9r/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Este",
+    "profundidad_raw": "0-20",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 10.5
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY ESTE.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY ESTE.pdf",
+    "informe_url": "https://drive.google.com/file/d/13Kg_odQAqHnpaNUazblfE92A-DY6qa9r/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Este",
+    "profundidad_raw": "20-40",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 5.0
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY ESTE.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY ESTE.pdf",
+    "informe_url": "https://drive.google.com/file/d/13Kg_odQAqHnpaNUazblfE92A-DY6qa9r/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Este",
+    "profundidad_raw": "40-60",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 4.8
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY ESTE.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf",
+    "informe_url": "https://drive.google.com/file/d/1A2OYxmzggY_H3tf0E5yRchABl0IANLdf/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Medio",
+    "profundidad_raw": "0-20",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 7.0
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf",
+    "informe_url": "https://drive.google.com/file/d/1A2OYxmzggY_H3tf0E5yRchABl0IANLdf/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Medio",
+    "profundidad_raw": "20-40",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 4.1
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf",
+    "informe_url": "https://drive.google.com/file/d/1A2OYxmzggY_H3tf0E5yRchABl0IANLdf/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Medio",
+    "profundidad_raw": "40-60",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 3.0
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY MEDIO.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY OESTE.pdf",
+    "informe_url": "https://drive.google.com/file/d/1-ZQQTVJSi9je7rUrGcKPaeX_okIndMci/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Oeste",
+    "profundidad_raw": "0-20",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 6.2
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY OESTE.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY OESTE.pdf",
+    "informe_url": "https://drive.google.com/file/d/1-ZQQTVJSi9je7rUrGcKPaeX_okIndMci/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Oeste",
+    "profundidad_raw": "20-40",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 3.0
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY OESTE.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
+  },
+  {
+    "dataset": "quimico",
+    "lab": "Laboratorio Molisol",
+    "informe": "COLOMBERO EUCALIPTUS 1 KREY OESTE.pdf",
+    "informe_url": "https://drive.google.com/file/d/1-ZQQTVJSi9je7rUrGcKPaeX_okIndMci/view",
+    "productor_raw": "A Y N Colombero",
+    "localidad": null,
+    "lote_raw": "EUCALIPTUS KREY VARIABILIDAD",
+    "manejo_tipo": null,
+    "muestra": "Oeste",
+    "profundidad_raw": "40-60",
+    "fecha_raw": "2026-08-06",
+    "campana": "26/27",
+    "params": {
+      "N_NO3": 1.5
+    },
+    "score": null,
+    "clasificacion": null,
+    "_nota": "Cargado a mano desde PDF Molisol enviado por WhatsApp (COLOMBERO EUCALIPTUS 1 KREY OESTE.pdf, 6/8/2026). Punto de muestreo de variabilidad interna, lote separado 'Eucaliptus Krey Variabilidad' (no se mezcla con el Eucaliptus 1 Krey de análisis completo). Solo trae N-NO3 por profundidad. Vinculado al mismo PDF que ya estaba subido en la carpeta de Drive de Colombero (Agroideas), cargado el 13/8. Sacar cuando el dato llegue en un Excel maestro nuevo."
   }
 ]

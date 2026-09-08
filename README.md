@@ -41,13 +41,23 @@ ejemplo, la entrada de Anahuac/Lote 5 se sacó al llegar el v9 porque ya
 estaba en el Excel maestro).
 
 **Un mismo lote puede tener varios puntos de muestreo de variabilidad**
-(por ejemplo "Eucaliptus 1 Krey" de A Y N Colombero, muestreado en los
-puntos Este/Medio/Oeste/Manchones el mismo día). Estos no son lotes
-distintos: se cargan todos con el mismo `lote_raw` y se usa el campo
-`muestra` para anotar el punto, así quedan en la misma ficha en vez de
-fragmentarse en campos nuevos. El gráfico de evolución los promedia por
-fecha (igual que las sub-muestras de AgLab); la tabla los sigue mostrando
-por separado.
+dentro de una misma ficha (por ejemplo "Eucaliptus Krey Variabilidad" de
+A Y N Colombero: puntos Este/Medio/Oeste/Manchones, cada uno con sus 3
+profundidades). No son lotes distintos entre sí, así que se cargan todos
+con el mismo `lote_raw` y se usa el campo `muestra` para anotar el punto —
+la tabla muestra una columna "Punto" en ese caso, y el gráfico de evolución
+los promedia por fecha (igual que las sub-muestras de AgLab), marcando el
+punto promediado con "(prom.)" y un círculo punteado.
+
+Ojo: si el punto de variabilidad usa el mismo nombre base que otro lote ya
+cargado con análisis completo (acá, "Eucaliptus 1 Krey" a secas SÍ tiene su
+propio panel completo pH/MO/etc., separado de "Eucaliptus Krey
+Variabilidad"), hay que darle al `lote_raw` un nombre que no dispare la
+fusión automática con ese otro lote — sacarle el número de lote alcanza
+(`normalize_core` exige que un token "distintivo" compartido, tipo "Krey",
+venga acompañado de un número de lote MISMO en ambos nombres para fusionar;
+si al nombre nuevo le falta el número que sí tiene el original, la fusión
+queda bloqueada).
 
 **El link al informe ("Ver PDF") busca el archivo fuente por nombre,
 probando tanto PDF como XLS** (algunos informes recientes de Molisol solo
