@@ -140,7 +140,8 @@
     sort: "nombre",
     selectedId: null,
     selectedParam: null,
-    selectedDepth: null
+    selectedDepth: null,
+    selectedMuestra: null
   };
 
   // ---------------- filtering ----------------
@@ -238,6 +239,9 @@
     "Convencional": "var(--series-quimico)",
     "Microbiológico": "var(--series-biologico)"
   };
+  // fallback palette for series that aren't a tipo (e.g. comparing sampling
+  // points -- Este/Medio/Oeste/etc -- within one lote), assigned in order
+  var SERIES_PALETTE = ["var(--series-alt1)", "var(--series-alt2)", "var(--series-alt3)", "var(--series-alt4)", "var(--series-alt5)", "var(--series-alt6)"];
 
   function bandsFor(meta, domainMin, domainMax) {
     var bands = [];
@@ -327,7 +331,7 @@
     seriesList.forEach(function (s, sIdx) {
       var pts = s.points.slice().sort(function (a, b) { return a.x < b.x ? -1 : 1; });
       if (!pts.length) return;
-      var color = TIPO_COLORS[s.label] || "var(--series-general)";
+      var color = s.color || TIPO_COLORS[s.label] || "var(--series-general)";
       // when two series share a date, their labels would land on the exact
       // same spot -- alternate above/below by series so both stay readable
       var labelAbove = sIdx % 2 === 0;
@@ -467,23 +471,46 @@
       return '<span class="chip param-chip' + (k === state.selectedParam ? " active" : "") + '" data-param="' + k + '" title="' + esc(meta[k].label) + '">' + esc(meta[k].label) + "</span>";
     }).join("") + "</div>";
 
+    var hasMuestra = dsRows.some(function (r) { return r.muestra; });
+    var muestras = dsRows.reduce(function (a, r) { if (r.muestra && a.indexOf(r.muestra) === -1) a.push(r.muestra); return a; }, []);
+    if (state.selectedMuestra && muestras.indexOf(state.selectedMuestra) === -1) state.selectedMuestra = null;
+    var muestraHtml = "";
+    if (hasMuestra && muestras.length > 1) {
+      muestraHtml = '<div class="depth-picker"><span class="glabel">Punto</span>' +
+        '<span class="chip muestra-chip' + (!state.selectedMuestra ? " active" : "") + '" data-muestra="">Todos (comparar)</span>' +
+        muestras.map(function (m) {
+          return '<span class="chip muestra-chip' + (m === state.selectedMuestra ? " active" : "") + '" data-muestra="' + esc(m) + '">' + esc(m) + "</span>";
+        }).join("") + "</div>";
+    }
+
     var chartHtml = "";
     if (state.selectedParam) {
       var pmeta = meta[state.selectedParam];
       var chartRows = dsRows.filter(function (r) { return (r.prof || "Sin dato") === state.selectedDepth; });
+      if (state.selectedMuestra) chartRows = chartRows.filter(function (r) { return r.muestra === state.selectedMuestra; });
+      // group by tipo (Químico/Biológico/Testigo) when present -- that's the
+      // long-standing comparison; when a lote has no tipo but does have
+      // several sampling points (muestra) instead, compare by point so
+      // "Todos" shows one line per Este/Medio/Oeste/etc, colored distinctly
       var byGroup = {};
+      var groupOrder = [];
       chartRows.forEach(function (r) {
         var v = paramVal(r, state.selectedParam);
         if (v === null || v === undefined) return;
-        var tk = r.tipo || "General";
-        if (!byGroup[tk]) byGroup[tk] = [];
+        var tk = r.tipo || r.muestra || "General";
+        if (!byGroup[tk]) { byGroup[tk] = []; groupOrder.push(tk); }
         byGroup[tk].push({ x: r.fecha, y: v });
       });
-      var seriesList = Object.keys(byGroup).map(function (k) { return { label: k, points: aggregateByDate(byGroup[k]) }; });
+      var altIdx = 0;
+      var seriesList = groupOrder.map(function (k) {
+        var color = TIPO_COLORS[k];
+        if (!color) { color = SERIES_PALETTE[altIdx % SERIES_PALETTE.length]; altIdx++; }
+        return { label: k, points: aggregateByDate(byGroup[k]), color: color };
+      });
       var legendHtml = "";
       if (seriesList.length > 1) {
         legendHtml = '<div class="legend">' + seriesList.map(function (s) {
-          return '<div class="legend-item"><span class="legend-swatch" style="background:' + (TIPO_COLORS[s.label] || "var(--series-general)") + '"></span>' + esc(s.label) + "</div>";
+          return '<div class="legend-item"><span class="legend-swatch" style="background:' + s.color + '"></span>' + esc(s.label) + "</div>";
         }).join("") + "</div>";
       }
       chartHtml = '<div class="chart-wrap">' +
@@ -496,7 +523,6 @@
 
     var tableCols = availParams.slice(0, 12);
     var tableRows = dsRows.slice().sort(function (a, b) { return (a.fecha || "").localeCompare(b.fecha || ""); });
-    var hasMuestra = dsRows.some(function (r) { return r.muestra; });
     var theadHtml = "<tr><th>Fecha</th><th>Informe</th><th>Laboratorio</th><th>Tipo</th><th>Prof.</th>" +
       (hasMuestra ? "<th>Punto</th>" : "") +
       tableCols.map(function (k) { return "<th>" + esc(meta[k].label.length > 16 ? k.replace(/_/g, " ") : meta[k].label) + "</th>"; }).join("") +
@@ -535,6 +561,7 @@
       '<span class="meta-item">Laboratorios: <b>' + (labs.join(", ") || "—") + "</b></span>" +
       "</div>" +
       '<div class="subcontrols">' + paramHtml + depthHtml + "</div>" +
+      muestraHtml +
       chartHtml +
       '<div class="table-scroll"><table class="data-table"><thead>' + theadHtml + "</thead><tbody>" + tbodyHtml + "</tbody></table></div>" +
       "</div>";
@@ -548,11 +575,14 @@
     Array.prototype.forEach.call(pane.querySelectorAll(".param-chip"), function (el) {
       el.addEventListener("click", function () { state.selectedParam = el.getAttribute("data-param"); renderCampoDetail(campo); });
     });
+    Array.prototype.forEach.call(pane.querySelectorAll(".muestra-chip"), function (el) {
+      el.addEventListener("click", function () { state.selectedMuestra = el.getAttribute("data-muestra") || null; renderCampoDetail(campo); });
+    });
   }
 
   function selectCampo(id) {
     state.selectedId = id;
-    state.selectedParam = null; state.selectedDepth = null;
+    state.selectedParam = null; state.selectedDepth = null; state.selectedMuestra = null;
     render();
     var card = document.querySelector('.campo-card[data-id="' + id + '"]');
     if (card) card.scrollIntoView({ block: "nearest" });
