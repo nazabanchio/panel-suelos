@@ -248,6 +248,16 @@ for r in chem_rows:
         r["lote"] = "COL 5"
         r["lote_core"], _ = normalize_core(r["lote"])
 
+# "Eucaliptus Krey" (biológico, TecnoSustrato, 2025) -> "Eucaliptus Krey 1":
+# requested by the user to number this specific field, distinguishing it
+# from other Krey-area lots. Only ever compared against other biológico
+# rows (datasets never merge), so no cross-dataset naming collision risk.
+for r in bio_rows:
+    if (r["productor"] == "A Y N Colombero" and r["lote"] == "Eucaliptus Krey"
+            and r["fecha"] == "2025-09-15"):
+        r["lote"] = "Eucaliptus Krey 1"
+        r["lote_core"], _ = normalize_core(r["lote"])
+
 # AgLab (Agro Ideas) report links: AgLab's own "Archivo/Informe" column for
 # these rows is just the lot name repeated, not a real per-report reference
 # (see the local-PDF linking comment further down), so the usual
