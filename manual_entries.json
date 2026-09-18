@@ -701,7 +701,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1222 A.pdf, copiado a AFA/Anahuac/), campo nuevo. Campaña 2026/2027 inferida de la fecha de muestreo (3/9/2026). Conductividad convertida de dS/m (0,1) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1222 A.pdf, copiado a AFA/Anahuac/), campo nuevo. Campaña 2026/2027 inferida de la fecha de muestreo (3/9/2026). Conductividad convertida de dS/m (0,1) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1IlqaSX0ilBGFRNoWBLypHdmhhDXqFGsy/view"
   },
   {
     "dataset": "quimico",
@@ -726,7 +727,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1222 B.pdf, copiado a AFA/Anahuac/), campo nuevo. Campaña 2026/2027 inferida de la fecha de muestreo (3/9/2026). Conductividad convertida de dS/m (0,3) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1222 B.pdf, copiado a AFA/Anahuac/), campo nuevo. Campaña 2026/2027 inferida de la fecha de muestreo (3/9/2026). Conductividad convertida de dS/m (0,3) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1nF_pOoh8K0wAcIWq-OxresVakwn2Af4b/view"
   },
   {
     "dataset": "quimico",
@@ -750,7 +752,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1149 A.pdf, copiado a AFA/Colombero/), campo nuevo (químico -- separado del Vietto biológico ya cargado). Conductividad convertida de dS/m (0,7) a µS/cm (x1000). N-NO3 no analizado (N.R. en el informe). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1149 A.pdf, copiado a AFA/Colombero/), campo nuevo (químico -- separado del Vietto biológico ya cargado). Conductividad convertida de dS/m (0,7) a µS/cm (x1000). N-NO3 no analizado (N.R. en el informe). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1kt5yCyyX3ZXaWYYXLPoJoNl6dg8QtP2H/view"
   },
   {
     "dataset": "quimico",
@@ -774,7 +777,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1149 B.pdf, copiado a AFA/Colombero/). Conductividad convertida de dS/m (0,8) a µS/cm (x1000). N-NO3 no analizado. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1149 B.pdf, copiado a AFA/Colombero/). Conductividad convertida de dS/m (0,8) a µS/cm (x1000). N-NO3 no analizado. Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1NGn2qEij5b8YetuRK9M7-0dawua9aEVA/view"
   },
   {
     "dataset": "quimico",
@@ -798,7 +802,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1150 A.pdf, copiado a AFA/Colombero/), campo nuevo (químico). Conductividad convertida de dS/m (0,5) a µS/cm (x1000). N-NO3 no analizado. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1150 A.pdf, copiado a AFA/Colombero/), campo nuevo (químico). Conductividad convertida de dS/m (0,5) a µS/cm (x1000). N-NO3 no analizado. Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1EIRj0R50IGUABbw7cdIHKJcrMdRrsIUJ/view"
   },
   {
     "dataset": "quimico",
@@ -822,7 +827,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1150 B.pdf, copiado a AFA/Colombero/). Conductividad convertida de dS/m (0,5) a µS/cm (x1000). N-NO3 no analizado. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (INFORME ANALISIS DE SUELOS S26-1150 B.pdf, copiado a AFA/Colombero/). Conductividad convertida de dS/m (0,5) a µS/cm (x1000). N-NO3 no analizado. Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1rtoryvErJF4P3GZQcOZ75gOcTdmOTLKh/view"
   },
   {
     "dataset": "quimico",
