@@ -1200,7 +1200,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (S26-1291 A, copiado a AFA/Analisis/), se suma al lote Wilfredo ya existente. Campaña 2026/2027 inferida de la fecha de muestreo (9/9/2026). Conductividad convertida de dS/m (0,1) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (S26-1291 A, copiado a AFA/Analisis/), se suma al lote Wilfredo ya existente. Campaña 2026/2027 inferida de la fecha de muestreo (9/9/2026). Conductividad convertida de dS/m (0,1) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1PbE3I5Ermi0vBkAAFzqBU7DL3BnIioqI/view"
   },
   {
     "dataset": "quimico",
@@ -1225,7 +1226,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (S26-1291 B, copiado a AFA/Analisis/), se suma al lote Wilfredo ya existente. Campaña 2026/2027 inferida de la fecha de muestreo (9/9/2026). Conductividad convertida de dS/m (0,1) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (S26-1291 B, copiado a AFA/Analisis/), se suma al lote Wilfredo ya existente. Campaña 2026/2027 inferida de la fecha de muestreo (9/9/2026). Conductividad convertida de dS/m (0,1) a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1CUf1mSuMwOZfRovbJD4K5u6-tF4Ezmcx/view"
   },
   {
     "dataset": "biologico",
@@ -1325,7 +1327,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (S26-1290 A, copiado a AFA/Analisis/). Se suma al lote Wilfredo ya existente como punto de muestreo \"Vicia\" (confirmado por el usuario: es el mismo lote). Campaña 2026/2027 inferida de la fecha de muestreo. Conductividad convertida de dS/m a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (S26-1290 A, copiado a AFA/Analisis/). Se suma al lote Wilfredo ya existente como punto de muestreo \"Vicia\" (confirmado por el usuario: es el mismo lote). Campaña 2026/2027 inferida de la fecha de muestreo. Conductividad convertida de dS/m a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1gvpWC1V7MQJkemBBiJNH3nPMsLyM_JBt/view"
   },
   {
     "dataset": "quimico",
@@ -1350,7 +1353,8 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (S26-1290 B, copiado a AFA/Analisis/). Se suma al lote Wilfredo ya existente como punto de muestreo \"Vicia\" (confirmado por el usuario: es el mismo lote). Campaña 2026/2027 inferida de la fecha de muestreo. Conductividad convertida de dS/m a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (S26-1290 B, copiado a AFA/Analisis/). Se suma al lote Wilfredo ya existente como punto de muestreo \"Vicia\" (confirmado por el usuario: es el mismo lote). Campaña 2026/2027 inferida de la fecha de muestreo. Conductividad convertida de dS/m a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1XLjF5q49ew0owKWm1NqWPQEkxcsUvTgT/view"
   },
   {
     "dataset": "quimico",
@@ -1375,6 +1379,7 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF AFA (S26-1292 B, copiado a AFA/Analisis/). Racolto/\"Vattano\" confirmado por el usuario como el mismo productor y lote que Vatano Racolto / Lote Único. Solo viene 20-40 cm (falta el 1292 A). Conductividad 0,0 dS/m en el informe (menor a 50 µS/cm redondeado): se deja vacía en vez de graficar un 0 falso. Campaña 2026/2027 inferida de la fecha de muestreo. Conductividad convertida de dS/m a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF AFA (S26-1292 B, copiado a AFA/Analisis/). Racolto/\"Vattano\" confirmado por el usuario como el mismo productor y lote que Vatano Racolto / Lote Único. Solo viene 20-40 cm (falta el 1292 A). Conductividad 0,0 dS/m en el informe (menor a 50 µS/cm redondeado): se deja vacía en vez de graficar un 0 falso. Campaña 2026/2027 inferida de la fecha de muestreo. Conductividad convertida de dS/m a µS/cm (x1000). Sacar cuando el dato llegue en un Excel maestro nuevo.",
+    "informe_url": "https://drive.google.com/file/d/1BuWQnp8Z8TqbmVzCpQFa5LzZswto1IZ5/view"
   }
 ]
