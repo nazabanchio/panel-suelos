@@ -858,7 +858,7 @@
     var last = campo.last_date;
     var lastRows = rows.filter(function (r) { return r.fecha === last; });
     var lastCols = paramsWithData(lastRows, priority, meta, getter).slice(0, 9);
-    var lastHtml = '<table class="rep-table"><thead><tr><th>Prof.</th>' + (hasMuestra ? "<th>Punto</th>" : "") +
+    var lastHtml = !opts.last ? "" : '<table class="rep-table"><thead><tr><th>Prof.</th>' + (hasMuestra ? "<th>Punto</th>" : "") +
       lastCols.map(function (k) { return "<th>" + esc(meta[k].label) + (meta[k].unit ? "<small> (" + esc(meta[k].unit) + ")</small>" : "") + "</th>"; }).join("") +
       "</tr></thead><tbody>" + lastRows.map(function (r) {
         return "<tr><td>" + esc(r.prof || "—") + "</td>" + (hasMuestra ? "<td>" + esc(r.muestra || "—") + "</td>" : "") +
@@ -910,17 +910,21 @@
       '<div class="rep-meta"><span><b>' + campo.n_analyses + "</b> análisis</span><span>Período: <b>" + fmtDate(campo.first_date) + " – " + fmtDate(campo.last_date) + "</b></span>" +
       "<span>Campañas: <b>" + esc(campanas.join(", ") || "—") + "</b></span><span>Laboratorios: <b>" + esc(labs.join(", ") || "—") + "</b></span></div>" +
       overallHtml +
-      "<h3>Último análisis · " + fmtDate(last) + "</h3>" + lastHtml +
-      "<h3>Evolución" + (depth ? " · profundidad " + esc(depth) : "") + "</h3>" +
-      '<div class="rep-note">Franjas de fondo: rojo = crítico, amarillo = intermedio, verde = óptimo.' + (hasMuestra ? " Cada línea es un punto de muestreo." : "") + "</div>" +
-      '<div class="rep-charts">' + chartsHtml + "</div>" + histHtml + "</section>";
+      (opts.last ? "<h3>Último análisis · " + fmtDate(last) + "</h3>" + lastHtml : "") +
+      (opts.trend ? trendPanelHtml(campo, depth, { print: true }) : "") +
+      (opts.charts ? "<h3>Evolución" + (depth ? " · profundidad " + esc(depth) : "") + "</h3>" +
+        '<div class="rep-note">Franjas de fondo: rojo = crítico, amarillo = intermedio, verde = óptimo.' + (hasMuestra ? " Cada línea es un punto de muestreo." : "") + "</div>" +
+        '<div class="rep-charts">' + chartsHtml + "</div>" : "") +
+      histHtml + "</section>";
   }
 
   var reportIds = [];
-  var reportOpts = { history: true };
+  var reportOpts = { last: true, charts: true, history: true, trend: true, summary: false };
 
-  function openReport(ids) {
+  function openReport(ids, preset) {
     reportIds = ids.slice();
+    if (preset !== false && !reportOpts.__keep) reportOpts = { last: true, charts: true, history: true, trend: true, summary: false };
+    delete reportOpts.__keep;
     var host = document.getElementById("reportView");
     host.hidden = false;
     document.body.classList.add("rep-open");
@@ -936,14 +940,20 @@
     var today = new Date().toLocaleDateString("es-AR", { day: "2-digit", month: "long", year: "numeric" });
     host.innerHTML = '<div class="rep-toolbar no-print">' +
       '<div><b>Informe · ' + campos.length + (campos.length === 1 ? " lote" : " lotes") + '</b> <span class="rep-hint">En el diálogo de impresión elegí "Guardar como PDF".</span></div>' +
-      '<div class="rep-actions"><label class="chk"><input type="checkbox" id="repHist"' + (reportOpts.history ? " checked" : "") + '> Incluir historial completo</label>' +
+      '<div class="rep-actions">' +
+      [["trend", "Seguimiento"], ["last", "Último análisis"], ["charts", "Gráficos"], ["history", "Historial"]].map(function (o) {
+        return '<label class="chk"><input type="checkbox" data-ropt="' + o[0] + '"' + (reportOpts[o[0]] ? " checked" : "") + "> " + o[1] + "</label>";
+      }).join("") +
       '<button class="btn primary" id="repPrint">Imprimir / Guardar PDF</button><button class="btn ghost" id="repClose">Cerrar</button></div></div>' +
       '<div class="report-light rep-doc"><div class="rep-cover"><div><div class="rep-title">Informe de análisis de suelo</div><div class="rep-sub">Panel de Suelos · generado el ' + esc(today) + "</div></div></div>" +
+      (reportOpts.summary && campos.length > 1 ? reportSummaryHtml(campos) : "") +
       campos.map(function (c) { return reportForCampo(c, reportOpts); }).join("") +
       '<div class="rep-foot">Valores según los informes de laboratorio (Molisol, AFA, Clínica de Suelos, AgLab, TecnoSustrato). Umbrales de referencia: INTA / estándares pampeanos y metodología TecnoSustrato. Uso interno de campo.</div></div>';
     host.scrollTop = 0;
     document.getElementById("repClose").addEventListener("click", closeReport);
-    document.getElementById("repHist").addEventListener("change", function (e) { reportOpts.history = e.target.checked; renderReport(); });
+    Array.prototype.forEach.call(host.querySelectorAll("[data-ropt]"), function (cb) {
+      cb.addEventListener("change", function () { reportOpts[cb.getAttribute("data-ropt")] = cb.checked; renderReport(); });
+    });
     document.getElementById("repPrint").addEventListener("click", function () {
       var prev = document.title;
       document.title = campos.length === 1 ? "Informe - " + campos[0].lote + " - " + campos[0].productor : "Informe de suelos - " + campos.length + " lotes";
@@ -997,6 +1007,7 @@
     var host = document.getElementById("topActions");
     host.innerHTML =
       '<button class="btn primary" id="btnUpload" title="Subir informes PDF (AFA, Molisol, TecnoSustrato) y sumarlos al panel">⬆ Subir informe (PDF)</button>' +
+      '<button class="btn" id="btnTrendReport" title="Informe con las mejoras y alertas detectadas entre análisis (usa los filtros de la lista)">📈 Informe de seguimiento</button>' +
       '<button class="btn" id="btnSelectMode" title="Elegir varios lotes y generar un informe imprimible">🖨 Informe de lotes</button>' +
       '<button class="btn warnbtn" id="btnPending" style="display:none"></button>';
     var input = document.getElementById("pdfInput");
@@ -1006,6 +1017,7 @@
       handleFiles(files).then(function () { input.value = ""; });
     });
     document.getElementById("btnSelectMode").addEventListener("click", function () { setSelectMode(!selectMode); });
+    document.getElementById("btnTrendReport").addEventListener("click", openTrendReport);
     document.getElementById("btnPending").addEventListener("click", openPending);
     // soltar PDFs sobre la página
     window.addEventListener("dragover", function (e) { if (e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], "Files") !== -1) e.preventDefault(); });

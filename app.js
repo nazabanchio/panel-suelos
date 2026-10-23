@@ -141,7 +141,8 @@
     selectedId: null,
     selectedParam: null,
     selectedDepth: null,
-    selectedMuestra: null
+    selectedMuestra: null,
+    trend: "todos"
   };
 
   // ---------------- filtering ----------------
@@ -159,6 +160,7 @@
       if (state.dataset !== "todos" && c.dataset !== state.dataset) return false;
       if (state.tipo !== "todos" && c.tipos.indexOf(state.tipo) === -1) return false;
       if (state.productor !== "todos" && c.productor !== state.productor) return false;
+      if (state.trend !== "todos" && !trendMatches(c, state.trend)) return false;
       if (q && campoSearchBlob(c).indexOf(q) === -1) return false;
       return true;
     });
@@ -220,7 +222,7 @@
       return '<div class="campo-card' + (c.id === state.selectedId ? " selected" : "") + (selectMode && selectedIds[c.id] ? " picked" : "") + '" data-id="' + c.id + '">' +
         '<div class="row1">' + selBox + '<span class="status-dot ' + st + '"></span><span class="campo-title">' + esc(c.lote) + "</span></div>" +
         '<div class="campo-sub">' + esc(c.productor) + "</div>" +
-        '<div class="row2">' + badges + "</div>" +
+        '<div class="row2">' + badges + trendBadgeHtml(c) + "</div>" +
         '<div class="campo-meta">' + c.n_analyses + " análisis · " + range + (c.rows.some(function (r) { return r._user; }) ? ' · <span class="local-tag" title="Incluye análisis cargados desde este navegador">cargado acá</span>' : "") + "</div>" +
         sparklineSVG(c) +
         "</div>";
@@ -415,6 +417,7 @@
       '<p style="color:var(--ink-faint);font-size:11.5px;margin:0 0 8px;">Según clasificación química crítica o baja actividad biológica en el análisis más reciente.</p>' +
       attnHtml +
       "</div>" +
+      trendOverviewHtml() +
       '<div class="panel empty-detail" style="padding:30px 20px;">' +
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="m21 21-4.3-4.3"/><circle cx="11" cy="11" r="7"/></svg>' +
       "<div>Buscá o elegí un campo de la lista para ver su ficha completa,<br>histórico de análisis y evolución de parámetros.</div>" +
@@ -425,6 +428,7 @@
     Array.prototype.forEach.call(pane.querySelectorAll(".attn-item"), function (el) {
       el.addEventListener("click", function () { selectCampo(el.getAttribute("data-id")); });
     });
+    bindTrendOverview(pane);
   }
 
   // ---------------- detail ----------------
@@ -547,6 +551,7 @@
       '<div class="subcontrols">' + paramHtml + depthHtml + "</div>" +
       muestraHtml +
       chartHtml +
+      trendPanelHtml(campo, state.selectedDepth) +
       '<div class="table-scroll"><table class="data-table"><thead>' + theadHtml + "</thead><tbody>" + tbodyHtml + "</tbody></table></div>" +
       "</div>";
 
@@ -638,6 +643,7 @@
   //@@FEATURES@@
 
   setupControls();
+  setupTrendControls();
   setupFeatureButtons();
   initUserData();
   render();

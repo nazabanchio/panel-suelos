@@ -547,6 +547,42 @@
     .rep-table tr { break-inside: avoid; }
     .rep-doc a { color: #1d5fd6; }
   }
+
+  /* ---------- Seguimiento ---------- */
+  .tr-pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+  .tr-pill.good { background: var(--good-soft); color: var(--good); }
+  .tr-pill.bad { background: var(--bad-soft); color: var(--bad); }
+  .tr-pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .tr-pill.none { background: var(--surface-2); color: var(--ink-soft); border: 1px solid var(--border-strong); }
+  .tr-mini { display: inline-block; font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; margin-left: 6px; }
+  .tr-mini.good { background: var(--good-soft); color: var(--good); }
+  .tr-mini.bad { background: var(--bad-soft); color: var(--bad); }
+  .tr-mini.warn { background: var(--warn-soft); color: var(--warn); }
+  .tr-mini.none { background: var(--surface-2); color: var(--ink-faint); }
+  .trend-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 4px 0 8px; }
+  .tr-meta, .tr-note, .tr-empty { color: var(--ink-faint); font-size: 11.5px; }
+  .tr-note { margin-top: 10px; }
+  .trend-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 22px; }
+  @media (max-width: 760px) { .trend-cols { grid-template-columns: 1fr; } }
+  .trend-col ul, .tr-stable ul { margin: 4px 0 0; padding-left: 18px; font-size: 12.5px; line-height: 1.55; }
+  .trend-col li { margin-bottom: 5px; }
+  h4.tr-good { color: var(--good); margin: 10px 0 4px; font-size: 13px; }
+  h4.tr-bad { color: var(--bad); margin: 10px 0 4px; font-size: 13px; }
+  .tr-sub { margin: 16px 0 6px; font-size: 13px; }
+  .tr-pct { font-weight: 700; }
+  .tr-flag { color: var(--warn); font-size: 11px; }
+  .tr-stable { margin-top: 10px; font-size: 12px; color: var(--ink-soft); }
+  .tr-stable summary { cursor: pointer; font-weight: 600; }
+  .tr-table-wrap { overflow-x: auto; }
+  .tr-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .tr-table th { text-align: left; font-size: 10.5px; text-transform: uppercase; color: var(--ink-faint); padding: 4px 8px; border-bottom: 1px solid var(--border-strong); }
+  .tr-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); }
+  .tr-headline { margin-left: auto; font-size: 11px; color: var(--ink-soft); text-align: right; }
+  .trend-item { gap: 8px; }
+  .rep-summary .rep-table td, .rep-summary .rep-table th { text-align: left; }
+  .rep-doc .trend-panel { border: 0; box-shadow: none; padding: 0; margin: 0; background: transparent; }
+  .rep-doc .trend-panel h3 { margin-top: 16px; }
+  .rep-doc .trend-col li { break-inside: avoid; }
 </style>
 </head>
 <body>
@@ -574,7 +610,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="text" id="searchInput" placeholder="Buscar campo, lote o productor…" autocomplete="off">
       </div>
-      <select class="sel" id="productorFilter"></select>
+      <div class="chipgroup" id="trendFilter">
+      <span class="glabel">Seguimiento</span>
+    </div>
+    <select class="sel" id="productorFilter"></select>
     </div>
     <div class="chipgroup" id="datasetFilter">
       <span class="glabel">Estudio</span>

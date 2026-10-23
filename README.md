@@ -103,10 +103,29 @@ siempre en colores claros aunque el panel esté en modo oscuro.
 
 Código: `features.js` (se inserta en `app.js` por `build.py` en el marcador `//@@FEATURES@@`).
 
+## Seguimiento: mejoras y alertas entre análisis
+
+El panel compara, para cada lote, el último análisis contra el anterior (por parámetro, profundidad y
+tipo de manejo) y marca **mejora**, **alerta** o **sin cambios**: se considera mejora/alerta si el
+parámetro cambió de estado (crítico / intermedio / óptimo) o se movió de forma relevante hacia el lado
+bueno/malo según sus umbrales (pH: ±0,2; el resto, ≥12 % o 10 % del rango entre crítico y óptimo).
+Si ya estaba en óptimo y sigue ahí, no cuenta como mejora ni alerta. Nitratos, azufre, conductividad
+y nutrientes biodisponibles varían con la época/cultivo: se informan pero no pesan en el estado
+general. Se avisa si cambió el laboratorio entre los dos análisis (comparar con cautela) y si el
+último análisis tiene más de 12 meses.
+
+Dónde se ve: etiquetas ▲/▼/◆ en cada tarjeta, filtro "Seguimiento" (con mejoras / con alertas /
+desactualizados), sección "Seguimiento" en el panorama general y en cada ficha, y el botón
+**Informe de seguimiento** (resumen de todos los lotes de la lista + detalle por lote, imprimible).
+En lotes con manejo Biológico y Químico (convencional) hay además un comparativo entre ambos manejos.
+Convencional y microbiológico se evalúan siempre por separado, nunca se cruzan.
+
+Código: `trends.js` (se inserta junto con `features.js`).
+
 ## Archivos
 
 - `index.html` — la página final, autocontenida (esto es lo que se publica).
-- `template.html` / `app.js` / `features.js` / `data.json` — piezas fuente que arman `index.html`.
+- `template.html` / `app.js` / `features.js` / `trends.js` / `data.json` — piezas fuente que arman `index.html`.
 - `extract.py` — script que lee "Analisis_Suelos_UNIFICADO_v9.xlsx", hojas
   "Laboratorios" y "TecnoSustrato" por separado, suma lo
   que haya en `manual_entries.json`, y genera `data.json`. Agrupa por
