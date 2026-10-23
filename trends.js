@@ -356,5 +356,5 @@
     return '<section class="rep-lote rep-summary"><h1>Resumen de seguimiento</h1>' +
       '<div class="rep-meta"><span><b>' + list.length + "</b> lotes con 2+ análisis</span><span>Con alertas: <b>" + nA + "</b></span><span>Con mejoras: <b>" + nM + "</b></span></div>" +
       '<table class="rep-table"><thead><tr><th>Lote</th><th>Estudio</th><th>Estado</th><th>Mejoras</th><th>Alertas</th><th>Sin cambios</th><th>Cambios principales</th><th>Último</th></tr></thead><tbody>' + rows + "</tbody></table>" +
-      '<div class="rep-ref">Cada lote se compara contra su propio análisis anterior. ⏱ = último análisis con más de " + STALE_MONTHS + " meses. Detalle por lote en las páginas siguientes.</div></section>';
+      '<div class="rep-ref">Cada lote se compara contra su propio análisis anterior. ⏱ = último análisis con más de ' + STALE_MONTHS + ' meses. Detalle por lote en las páginas siguientes.</div></section>';
   }
