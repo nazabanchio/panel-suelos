@@ -11,6 +11,11 @@ with open(os.path.join(BASE, "template.html"), encoding="utf-8") as f:
 with open(os.path.join(BASE, "app.js"), encoding="utf-8") as f:
     appjs = f.read()
 
+with open(os.path.join(BASE, "features.js"), encoding="utf-8") as f:
+    featuresjs = f.read()
+assert "//@@FEATURES@@" in appjs, "falta el marcador //@@FEATURES@@ en app.js"
+appjs = appjs.replace("//@@FEATURES@@", featuresjs)
+
 out = template.replace("__DATA_JSON__", data_str_safe).replace("__APP_JS__", appjs)
 
 with open(os.path.join(BASE, "index.html"), "w", encoding="utf-8") as f:

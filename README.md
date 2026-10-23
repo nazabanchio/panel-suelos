@@ -77,10 +77,36 @@ como respaldo — así "Lote Único" de un productor nunca queda igualado a
 fusión dentro de un mismo productor sigue funcionando igual (usa también el
 nombre del productor como parte de la clave).
 
+## Subir informes desde el panel y armar informes por lote
+
+**Subir informe (PDF)** (botón arriba a la derecha, o arrastrando el PDF a la página): el panel lee
+el PDF en el navegador (pdf.js, se descarga recién al subir) y reconoce tres formatos: AFA (un lote
+por PDF), Molisol (cuadro con varios lotes) y TecnoSustrato (formato 2026, varios lotes). Antes de
+agregar muestra una pantalla de revisión: productor y lote se eligen de lo ya cargado (propone el más
+parecido, así el análisis se suma a la ficha existente y se ve la evolución), con los valores
+editables y aviso si parece un duplicado. Si se mandan dos secciones del PDF al mismo lote, el nombre
+original de cada una queda como "Punto" (caso Entrada izquierda/derecha de Alfredito).
+
+Limitación importante: la página es estática (GitHub Pages, sin servidor), así que lo que se sube
+queda **solo en ese navegador** (localStorage + IndexedDB para el PDF). Se marca como "cargado acá".
+Para publicarlo para todos: botón "Pendientes de publicar" → "Descargar JSON" (mismo esquema que
+`manual_entries.json`) y se suma a `manual_entries.json` junto con el PDF (subirlo al Drive y poner
+`informe_url`). No lee todavía el formato viejo de TecnoSustrato (2025, con curva de CO2) ni las
+cromatografías de tejido vegetal; en esos casos avisa.
+
+**Informe de lotes** (botón arriba, o "Informe PDF" dentro de una ficha): elegís uno o varios lotes
+(tildes en la lista, "Seleccionar los N de la lista" respeta los filtros) y se abre un informe
+imprimible por lote: estado según el último análisis, tabla del último muestreo con colores de
+referencia, gráficos de evolución y, opcionalmente, el historial completo con link al informe
+original. "Imprimir / Guardar PDF" usa el diálogo del navegador (elegir "Guardar como PDF"); sale
+siempre en colores claros aunque el panel esté en modo oscuro.
+
+Código: `features.js` (se inserta en `app.js` por `build.py` en el marcador `//@@FEATURES@@`).
+
 ## Archivos
 
 - `index.html` — la página final, autocontenida (esto es lo que se publica).
-- `template.html` / `app.js` / `data.json` — piezas fuente que arman `index.html`.
+- `template.html` / `app.js` / `features.js` / `data.json` — piezas fuente que arman `index.html`.
 - `extract.py` — script que lee "Analisis_Suelos_UNIFICADO_v9.xlsx", hojas
   "Laboratorios" y "TecnoSustrato" por separado, suma lo
   que haya en `manual_entries.json`, y genera `data.json`. Agrupa por

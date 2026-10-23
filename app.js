@@ -216,17 +216,25 @@
         ? '<span class="badge q" title="Análisis convencional (macro/micronutrientes)">CONV · ' + c.n_analyses + "</span>"
         : '<span class="badge b" title="Análisis microbiológico (TecnoSustrato)">MICROB · ' + c.n_analyses + "</span>";
       var range = c.first_date === c.last_date ? fmtDateShort(c.last_date) : fmtDateShort(c.first_date) + " – " + fmtDateShort(c.last_date);
-      return '<div class="campo-card' + (c.id === state.selectedId ? " selected" : "") + '" data-id="' + c.id + '">' +
-        '<div class="row1"><span class="status-dot ' + st + '"></span><span class="campo-title">' + esc(c.lote) + "</span></div>" +
+      var selBox = selectMode ? '<label class="sel-box" title="Incluir en el informe"><input type="checkbox" data-sel="' + c.id + '"' + (selectedIds[c.id] ? " checked" : "") + "></label>" : "";
+      return '<div class="campo-card' + (c.id === state.selectedId ? " selected" : "") + (selectMode && selectedIds[c.id] ? " picked" : "") + '" data-id="' + c.id + '">' +
+        '<div class="row1">' + selBox + '<span class="status-dot ' + st + '"></span><span class="campo-title">' + esc(c.lote) + "</span></div>" +
         '<div class="campo-sub">' + esc(c.productor) + "</div>" +
         '<div class="row2">' + badges + "</div>" +
-        '<div class="campo-meta">' + c.n_analyses + " análisis · " + range + "</div>" +
+        '<div class="campo-meta">' + c.n_analyses + " análisis · " + range + (c.rows.some(function (r) { return r._user; }) ? ' · <span class="local-tag" title="Incluye análisis cargados desde este navegador">cargado acá</span>' : "") + "</div>" +
         sparklineSVG(c) +
         "</div>";
     }).join("");
     pane.innerHTML = html;
     Array.prototype.forEach.call(pane.querySelectorAll(".campo-card"), function (el) {
       el.addEventListener("click", function () { selectCampo(el.getAttribute("data-id")); });
+    });
+    Array.prototype.forEach.call(pane.querySelectorAll("input[data-sel]"), function (cb) {
+      cb.addEventListener("click", function (e) { e.stopPropagation(); });
+      cb.addEventListener("change", function () {
+        toggleSelected(cb.getAttribute("data-sel"), cb.checked);
+        cb.closest(".campo-card").classList.toggle("picked", cb.checked);
+      });
     });
   }
 
@@ -486,33 +494,8 @@
     var chartHtml = "";
     if (state.selectedParam) {
       var pmeta = meta[state.selectedParam];
-      var chartRows = dsRows.filter(function (r) { return (r.prof || "Sin dato") === state.selectedDepth; });
-      if (state.selectedMuestra) chartRows = chartRows.filter(function (r) { return r.muestra === state.selectedMuestra; });
-      // group by tipo (Químico/Biológico/Testigo) when present -- that's the
-      // long-standing comparison; when a lote has no tipo but does have
-      // several sampling points (muestra) instead, compare by point so
-      // "Todos" shows one line per Este/Medio/Oeste/etc, colored distinctly
-      var byGroup = {};
-      var groupOrder = [];
-      chartRows.forEach(function (r) {
-        var v = paramVal(r, state.selectedParam);
-        if (v === null || v === undefined) return;
-        var tk = r.tipo || r.muestra || "General";
-        if (!byGroup[tk]) { byGroup[tk] = []; groupOrder.push(tk); }
-        byGroup[tk].push({ x: r.fecha, y: v });
-      });
-      var altIdx = 0;
-      var seriesList = groupOrder.map(function (k) {
-        var color = TIPO_COLORS[k];
-        if (!color) { color = SERIES_PALETTE[altIdx % SERIES_PALETTE.length]; altIdx++; }
-        return { label: k, points: aggregateByDate(byGroup[k]), color: color };
-      });
-      var legendHtml = "";
-      if (seriesList.length > 1) {
-        legendHtml = '<div class="legend">' + seriesList.map(function (s) {
-          return '<div class="legend-item"><span class="legend-swatch" style="background:' + s.color + '"></span>' + esc(s.label) + "</div>";
-        }).join("") + "</div>";
-      }
+      var seriesList = chartSeries(dsRows, state.selectedParam, state.selectedDepth, state.selectedMuestra);
+      var legendHtml = legendHtmlFor(seriesList);
       chartHtml = '<div class="chart-wrap">' +
         '<div class="chart-title">' + esc(pmeta.label) + (pmeta.unit ? ' <span class="unit">(' + esc(pmeta.unit) + ")</span>" : "") + "</div>" +
         (state.selectedDepth ? '<div class="chart-desc">Profundidad: ' + esc(state.selectedDepth) + " · Franjas de fondo: rojo = crítico, amarillo = intermedio, verde = óptimo</div>" : "") +
@@ -540,7 +523,7 @@
         scoreCell = '<td class="' + (stq ? "cell-" + stq : "") + '">' + (r.clasificacion || (r.score !== null && r.score !== undefined ? fmtNum(r.score) : "—")) + "</td>";
       }
       var labCell = "<td>" + esc(r.lab || "—") + "</td>";
-      var informeCell = "<td>" + (r.informe_file ? '<a href="' + esc(r.informe_file) + '" target="_blank" rel="noopener" class="informe-link" title="Abrir informe original en PDF">Ver PDF</a>' : "—") + "</td>";
+      var informeCell = "<td>" + (rowLink(r) ? '<a href="' + esc(rowLink(r)) + '" target="_blank" rel="noopener" class="informe-link" title="Abrir informe original en PDF">Ver PDF</a>' : "—") + "</td>";
       var fechaCell = r.fecha_is_estimate
         ? '<td title="Sin fecha exacta en la planilla: se usa el inicio de la campaña ' + esc(r.campana || "") + ' como referencia">~' + fmtDate(r.fecha) + "</td>"
         : "<td>" + fmtDate(r.fecha) + "</td>";
@@ -554,7 +537,8 @@
       '<button class="back-btn" id="backBtn">← Volver a la lista</button>' +
       '<div class="detail-head"><div><h2>' + esc(campo.lote) + "</h2>" +
       '<div class="sub">' + esc(campo.productor) + (municipio ? " · " + esc(municipio) : "") + "</div></div>" +
-      "<div>" + badges + "</div></div>" +
+      '<div class="detail-actions">' + badges + '<button class="btn" id="btnReportOne" title="Informe imprimible de este lote">🖨 Informe PDF</button></div></div>' +
+      (dsRows.some(function (r) { return r._user; }) ? '<div class="note info">Este lote incluye análisis cargados desde este navegador (todavía no publicados para todos).</div>' : "") +
       '<div class="meta-row">' +
       '<span class="meta-item"><b>' + campo.n_analyses + "</b> análisis registrados</span>" +
       '<span class="meta-item">Campañas: <b>' + (campanas.join(", ") || "—") + "</b></span>" +
@@ -565,6 +549,9 @@
       chartHtml +
       '<div class="table-scroll"><table class="data-table"><thead>' + theadHtml + "</thead><tbody>" + tbodyHtml + "</tbody></table></div>" +
       "</div>";
+
+    var repBtn = document.getElementById("btnReportOne");
+    if (repBtn) repBtn.addEventListener("click", function () { openReport([campo.id]); });
 
     var backBtn = document.getElementById("backBtn");
     if (backBtn) backBtn.addEventListener("click", function () { state.selectedId = null; render(); window.scrollTo({ top: 0, behavior: "smooth" }); });
@@ -602,10 +589,7 @@
 
   // ---------------- controls setup ----------------
   function setupControls() {
-    document.getElementById("topStats").innerHTML =
-      '<div class="stat-chip"><b class="num">' + DATA.stats.n_campos + '</b><span>Campos</span></div>' +
-      '<div class="stat-chip"><b class="num">' + (DATA.stats.n_chem + DATA.stats.n_bio) + '</b><span>Análisis</span></div>' +
-      '<div class="stat-chip"><b class="num">' + DATA.stats.n_productores + '</b><span>Productores</span></div>';
+    renderTopStats();
 
     var dsGroup = document.getElementById("datasetFilter");
     [["todos", "Todos"], ["quimico", "Análisis convencional"], ["biologico", "Análisis microbiológico"]].forEach(function (pair) {
@@ -636,16 +620,8 @@
       tipoGroup.appendChild(el);
     });
 
-    var productores = CAMPOS.reduce(function (a, c) { if (a.indexOf(c.productor) === -1) a.push(c.productor); return a; }, []).sort(function (a, b) { return a.localeCompare(b, "es"); });
     var prodSel = document.getElementById("productorFilter");
-    var optAll = document.createElement("option");
-    optAll.value = "todos"; optAll.textContent = "Todos los productores";
-    prodSel.appendChild(optAll);
-    productores.forEach(function (p) {
-      var o = document.createElement("option");
-      o.value = p; o.textContent = p;
-      prodSel.appendChild(o);
-    });
+    refreshProductorSelect();
     prodSel.addEventListener("change", function () { state.productor = prodSel.value; renderList(); });
 
     document.getElementById("sortSelect").addEventListener("change", function (e) { state.sort = e.target.value; renderList(); });
@@ -659,6 +635,10 @@
     });
   }
 
+  //@@FEATURES@@
+
   setupControls();
+  setupFeatureButtons();
+  initUserData();
   render();
 })();

@@ -410,6 +410,143 @@
   footer.foot a { color: var(--ink-faint); }
 
   .hidden { display: none !important; }
+
+  /* ---------- Cabecera: acciones ---------- */
+  .top-right { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .top-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .btn {
+    font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+    padding: 7px 12px; border-radius: 8px; border: 1px solid var(--border-strong);
+    background: var(--surface); color: var(--ink); white-space: nowrap;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn.primary:disabled { opacity: .45; cursor: default; }
+  .btn.ghost { background: transparent; }
+  .btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent-soft-ink); }
+  .btn.warnbtn { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+  .detail-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+  .note { font-size: 12px; padding: 8px 10px; border-radius: 8px; margin: 8px 0; }
+  .note.info { background: var(--accent-soft); color: var(--accent-soft-ink); }
+  .note.warn { background: var(--warn-soft); color: var(--warn); }
+  .local-tag { color: var(--warn); font-weight: 600; }
+  .hint { font-size: 11.5px; color: var(--ink-faint); margin: 4px 0; min-height: 14px; }
+  .hint.warn { color: var(--warn); font-weight: 600; }
+  .chk { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 70px; transform: translate(-50%, 20px); opacity: 0;
+    background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 10px;
+    font-size: 13px; z-index: 2000; transition: all .25s; max-width: 90vw; box-shadow: var(--shadow);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---------- Selección de lotes ---------- */
+  .sel-box { display: inline-flex; margin-right: 6px; }
+  .sel-box input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+  .campo-card.picked { outline: 2px solid var(--accent); }
+  .select-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 800; display: flex; gap: 10px; align-items: center;
+    flex-wrap: wrap; justify-content: center; padding: 10px 14px; background: var(--surface);
+    border-top: 1px solid var(--border-strong); box-shadow: 0 -6px 20px rgba(0,0,0,.18); font-size: 13px;
+  }
+  .select-bar[hidden] { display: none; }
+
+  /* ---------- Diálogos ---------- */
+  .modal-back {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 1500; overflow: auto;
+    display: flex; align-items: flex-start; justify-content: center; padding: 24px 12px;
+  }
+  .modal {
+    background: var(--surface); color: var(--ink); border: 1px solid var(--border); border-radius: 12px;
+    max-width: 1000px; width: 100%; padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; }
+  .modal-head h2 { margin: 0; font-size: 17px; }
+  .modal-sub { color: var(--ink-soft); font-size: 12.5px; margin: 6px 0 10px; }
+  .modal-foot { display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px; }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px 14px; }
+  .form-grid label, .lote-pick { display: flex; flex-direction: column; gap: 4px; font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
+  .form-grid .wide { grid-column: 1 / -1; }
+  .modal input[type=text], .modal input[type=date], .modal input[type=number], .modal select {
+    font: inherit; font-size: 13px; padding: 6px 8px; border-radius: 7px; border: 1px solid var(--border-strong);
+    background: var(--bg); color: var(--ink); text-transform: none; letter-spacing: 0;
+  }
+  .rv-lote { border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 12px; background: var(--bg); }
+  .rv-lote-head { display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap; }
+  .rv-table-wrap { overflow-x: auto; margin-top: 8px; }
+  .rv-table { border-collapse: collapse; font-size: 12px; }
+  .rv-table th { font-size: 10.5px; text-transform: uppercase; color: var(--ink-faint); text-align: left; padding: 4px 6px; white-space: nowrap; }
+  .rv-table td { padding: 3px 4px; }
+  .rv-table input[type=number] { width: 78px; }
+  .pend-list { font-size: 13px; line-height: 1.7; }
+
+  /* ---------- Informe imprimible ---------- */
+  .report-view { position: fixed; inset: 0; z-index: 1000; background: var(--bg); overflow: auto; }
+  .report-view[hidden] { display: none; }
+  .rep-toolbar {
+    position: sticky; top: 0; z-index: 5; display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; padding: 10px 18px; background: var(--surface); border-bottom: 1px solid var(--border-strong);
+  }
+  .rep-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .rep-hint { color: var(--ink-faint); font-size: 12px; margin-left: 8px; }
+  .report-light {
+    --bg:#f7f8f1; --bg-2:#eef1e5; --surface:#ffffff; --surface-2:#f1f3ea; --border:#dee3d3; --border-strong:#c7cfb8;
+    --ink:#1c2618; --ink-soft:#58634f; --ink-faint:#8c9682; --accent:#2e6b45; --accent-2:#1e4c30; --accent-soft:#e2eeda;
+    --accent-soft-ink:#245536; --good:#4a9a43; --good-soft:#e5f2df; --warn:#b9862a; --warn-soft:#faefd8; --bad:#b5502e; --bad-soft:#f8e4dc;
+    --series-quimico:#1d5fd6; --series-quimico-soft:#dde9f4; --series-biologico:#0f9960; --series-testigo:#b9862a; --series-general:#8c9682;
+    --series-alt1:#8b5cf6; --series-alt2:#e0742a; --series-alt3:#c2478d; --series-alt4:#1f9e9e; --series-alt5:#9c6b2f; --series-alt6:#4f5fad;
+    background: #fff; color: var(--ink);
+  }
+  .rep-doc { max-width: 940px; margin: 18px auto; padding: 26px 30px; border-radius: 10px; box-shadow: var(--shadow); }
+  .rep-cover { border-bottom: 3px solid var(--accent); padding-bottom: 10px; margin-bottom: 18px; }
+  .rep-title { font-size: 22px; font-weight: 700; color: var(--accent-2); }
+  .rep-sub { color: var(--ink-soft); font-size: 13px; }
+  .rep-lote { margin-bottom: 30px; }
+  .rep-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; border-bottom: 1px solid var(--border-strong); padding-bottom: 8px; }
+  .rep-head h1 { margin: 0; font-size: 20px; }
+  .rep-badge { font-size: 10.5px; font-weight: 700; letter-spacing: .05em; padding: 4px 9px; border-radius: 999px; white-space: nowrap; }
+  .rep-badge.q { background: var(--accent-soft); color: var(--accent-soft-ink); }
+  .rep-badge.b { background: var(--surface-2); color: var(--ink-soft); border: 1px solid var(--border-strong); }
+  .rep-meta { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 12.5px; color: var(--ink-soft); margin: 8px 0; }
+  .rep-pill { display: inline-block; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; margin: 2px 0 6px; }
+  .rep-pill.good { background: var(--good-soft); color: var(--good); }
+  .rep-pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .rep-pill.bad { background: var(--bad-soft); color: var(--bad); }
+  .rep-doc h3 { font-size: 14px; margin: 16px 0 6px; color: var(--accent-2); }
+  .rep-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+  .rep-table th { background: var(--surface-2); text-align: right; padding: 5px 6px; border-bottom: 1px solid var(--border-strong); font-size: 10.5px; }
+  .rep-table td { text-align: right; padding: 4px 6px; border-bottom: 1px solid var(--border); }
+  .rep-table th:first-child, .rep-table td:first-child { text-align: left; }
+  .rep-table small { font-weight: 400; color: var(--ink-faint); }
+  .rep-ref, .rep-note { font-size: 10.5px; color: var(--ink-faint); margin-top: 5px; }
+  .rep-charts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+  .rep-chart { break-inside: avoid; }
+  .rep-chart svg { width: 100%; height: auto; }
+  .rep-chart .chart-title { font-size: 12px; font-weight: 700; margin-top: 6px; }
+  .rep-foot { border-top: 1px solid var(--border-strong); padding-top: 8px; font-size: 10.5px; color: var(--ink-faint); }
+  .rep-table td.cell-good { background: var(--good-soft); }
+  .rep-table td.cell-warn { background: var(--warn-soft); }
+  .rep-table td.cell-bad { background: var(--bad-soft); }
+  .rep-doc a { color: var(--accent); }
+  @media (max-width: 760px) { .rep-charts { grid-template-columns: 1fr; } .rep-doc { padding: 16px; } }
+
+  @page { size: A4; margin: 12mm; }
+  @media print {
+    body > .app, .no-print, .select-bar, #modalRoot, .toast { display: none !important; }
+    html, body { background: #fff !important; height: auto !important; }
+    .report-view { position: static !important; inset: auto !important; overflow: visible !important; background: #fff !important; display: block; }
+    .report-view[hidden] { display: none !important; }
+    .rep-doc { max-width: none; margin: 0; padding: 0; box-shadow: none; border-radius: 0; }
+    .rep-lote { break-after: page; page-break-after: always; margin-bottom: 0; }
+    .rep-lote:last-of-type { break-after: auto; page-break-after: auto; }
+    .rep-table, .rep-table td, .rep-table th, .rep-chart svg, .rep-pill, .rep-badge, .legend-swatch {
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .rep-table tr { break-inside: avoid; }
+    .rep-doc a { color: #1d5fd6; }
+  }
 </style>
 </head>
 <body>
@@ -425,7 +562,10 @@
         <p>Análisis convencional (macro/micronutrientes) y análisis microbiológico (actividad microbiana) por campo — datos unificados de Molisol, AFA, Clínica de Suelos y TecnoSustrato</p>
       </div>
     </div>
-    <div class="top-stats" id="topStats"></div>
+    <div class="top-right">
+      <div class="top-stats" id="topStats"></div>
+      <div class="top-actions" id="topActions"></div>
+    </div>
   </header>
 
   <div class="controls">
@@ -458,6 +598,11 @@
 
   <footer class="foot">Panel generado a partir de "UNIFICADO_v8.xlsx" — hojas "Laboratorios" (Molisol, Clínica de Suelos, AFA, AgLab) y "TecnoSustrato" tratadas siempre por separado · Umbrales: INTA / estándares pampeanos y metodología TecnoSustrato · Uso interno de campo</footer>
 </div>
+
+<div id="selectBar" class="select-bar no-print" hidden></div>
+<div id="modalRoot" class="no-print"></div>
+<div id="reportView" class="report-view" hidden></div>
+<input type="file" id="pdfInput" accept="application/pdf,.pdf" multiple hidden>
 
 <script id="app-data" type="application/json">__DATA_JSON__</script>
 <script>
