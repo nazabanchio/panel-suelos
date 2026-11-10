@@ -456,7 +456,9 @@ doc_freq = defaultdict(int)
 for k in all_keys:
     for t in tokens_for_group(k):
         doc_freq[t] += 1
-DISTINCTIVE_MAX_DF = 3
+# 4 y no 3: "LA PALOMA 2" (convencional, Molachino) suma una aparición de PALOMA y con 3 el
+# biológico Paloma Norte/Centro/Sur de Las Hermanas dejaba de fusionarse
+DISTINCTIVE_MAX_DF = 4
 NEVER_DISTINCTIVE = {"ESTE", "OESTE", "NORTE", "SUR", "CENTRO", "MITAD"}
 
 def distinctive(toks):
