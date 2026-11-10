@@ -2225,7 +2225,7 @@
     "lab": "Laboratorio Molisol",
     "informe": "MOLACHINO JUAN - LA PALOMA 2.pdf",
     "informe_url": "https://drive.google.com/file/d/1X_rDqdynP_tWNwP8GCwo_Cf7TjsNXn1-/view",
-    "productor_raw": "Las Hermanas",
+    "productor_raw": "MAB",
     "localidad": null,
     "lote_raw": "LA PALOMA 2",
     "manejo_tipo": null,
@@ -2254,14 +2254,14 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (carpeta Lab Molisol/MOLACHINO JUAN), subido a la carpeta Molisol del Drive; el informe es del ingeniero Molachino Juan (ESTABLECIMIENTO del informe); por indicación del usuario los lotes de Las Hermanas se cargan bajo \"Las Hermanas\" y el resto bajo \"MAB\". Cada archivo es un lote. Profundidades 20/40/60 del cuadro tomadas como capas 0-20, 20-40 y 40-60 (supuesto: el PDF solo dice 20, 40 y 60). No se cargan los datos de humedad / agua útil (LA DELFINA 1) ni los valores de 100-200 cm, que no tienen casillero en el panel. NAN = nitrógeno anaeróbico del informe. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (carpeta Lab Molisol/MOLACHINO JUAN), subido a la carpeta Molisol del Drive; el informe es del ingeniero Molachino Juan (ESTABLECIMIENTO del informe); por indicación del usuario los lotes de Las Hermanas se cargan bajo \"Las Hermanas\" y el resto bajo \"MAB\". Cada archivo es un lote. Profundidades 20/40/60 del cuadro tomadas como capas 0-20, 20-40 y 40-60 (supuesto: el PDF solo dice 20, 40 y 60). No se cargan los datos de humedad / agua útil (LA DELFINA 1) ni los valores de 100-200 cm, que no tienen casillero en el panel. NAN = nitrógeno anaeróbico del informe. Sacar cuando el dato llegue en un Excel maestro nuevo. Reasignado por el usuario: La Paloma 2 va con MAB (no con Las Hermanas)."
   },
   {
     "dataset": "quimico",
     "lab": "Laboratorio Molisol",
     "informe": "MOLACHINO JUAN - LA PALOMA 2.pdf",
     "informe_url": "https://drive.google.com/file/d/1X_rDqdynP_tWNwP8GCwo_Cf7TjsNXn1-/view",
-    "productor_raw": "Las Hermanas",
+    "productor_raw": "MAB",
     "localidad": null,
     "lote_raw": "LA PALOMA 2",
     "manejo_tipo": null,
@@ -2290,7 +2290,7 @@
     },
     "score": null,
     "clasificacion": null,
-    "_nota": "Cargado a mano desde PDF Molisol (carpeta Lab Molisol/MOLACHINO JUAN), subido a la carpeta Molisol del Drive; el informe es del ingeniero Molachino Juan (ESTABLECIMIENTO del informe); por indicación del usuario los lotes de Las Hermanas se cargan bajo \"Las Hermanas\" y el resto bajo \"MAB\". Cada archivo es un lote. Profundidades 20/40/60 del cuadro tomadas como capas 0-20, 20-40 y 40-60 (supuesto: el PDF solo dice 20, 40 y 60). No se cargan los datos de humedad / agua útil (LA DELFINA 1) ni los valores de 100-200 cm, que no tienen casillero en el panel. NAN = nitrógeno anaeróbico del informe. Sacar cuando el dato llegue en un Excel maestro nuevo."
+    "_nota": "Cargado a mano desde PDF Molisol (carpeta Lab Molisol/MOLACHINO JUAN), subido a la carpeta Molisol del Drive; el informe es del ingeniero Molachino Juan (ESTABLECIMIENTO del informe); por indicación del usuario los lotes de Las Hermanas se cargan bajo \"Las Hermanas\" y el resto bajo \"MAB\". Cada archivo es un lote. Profundidades 20/40/60 del cuadro tomadas como capas 0-20, 20-40 y 40-60 (supuesto: el PDF solo dice 20, 40 y 60). No se cargan los datos de humedad / agua útil (LA DELFINA 1) ni los valores de 100-200 cm, que no tienen casillero en el panel. NAN = nitrógeno anaeróbico del informe. Sacar cuando el dato llegue en un Excel maestro nuevo. Reasignado por el usuario: La Paloma 2 va con MAB (no con Las Hermanas)."
   },
   {
     "dataset": "quimico",
